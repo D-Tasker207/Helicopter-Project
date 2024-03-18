@@ -14,26 +14,23 @@ milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/s
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_memmap.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_types.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/gpio.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/uart.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/sysctl.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/systick.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/debug.h
-milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pin_map.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/adc.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pwm.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/gpio.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/sysctl.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/systick.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/interrupt.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/debug.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/utils/ustdlib.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/time.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/abi_prefix.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/xlocale/_time.h
-milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdio.h
-milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 milestone1.obj: P:/Courses/ENCE361/labs/OrbitOLED/OrbitOLEDInterface.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 milestone1.obj: ../buttons4.h
 milestone1.obj: ../circBufT.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h
 
 ../milestone1.c:
 
@@ -63,25 +60,19 @@ C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_memmap.h:
 
 C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_types.h:
 
-C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h:
+C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/adc.h:
+
+C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pwm.h:
 
 C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/gpio.h:
-
-C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/uart.h:
 
 C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/sysctl.h:
 
 C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/systick.h:
 
-C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/debug.h:
-
-C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pin_map.h:
-
-C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/adc.h:
-
-C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pwm.h:
-
 C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/interrupt.h:
+
+C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/debug.h:
 
 C:/ti/TivaWare_C_Series-2.2.0.295/utils/ustdlib.h:
 
@@ -93,13 +84,13 @@ C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/abi_prefix.h:
 
 C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/xlocale/_time.h:
 
-C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdio.h:
+P:/Courses/ENCE361/labs/OrbitOLED/OrbitOLEDInterface.h:
 
 C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
-
-P:/Courses/ENCE361/labs/OrbitOLED/OrbitOLEDInterface.h:
 
 ../buttons4.h:
 
 ../circBufT.h:
+
+C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h:
 
