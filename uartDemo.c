@@ -76,7 +76,6 @@ SysTickIntHandler (void)
     	tickCount = 0;
     	slowTick = true;
     }
-
 }
 
 //********************************************************

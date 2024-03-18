@@ -27,8 +27,8 @@
 //*****************************************************************************
 // Constants
 //*****************************************************************************
-#define BUF_SIZE 8
-#define SAMPLE_RATE_HZ 80
+#define BUF_SIZE 16
+#define SAMPLE_RATE_HZ 160
 
 //*****************************************************************************
 // Global variables
@@ -117,7 +117,7 @@ initADC (void)
     // sequence 0 has 8 programmable steps.  Since we are only doing a single
     // conversion using sequence 3 we will only configure step 0.  For more
     // on the ADC sequences and steps, refer to the LM3S1968 datasheet.
-    ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH9 | ADC_CTL_IE |
+    ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH0 | ADC_CTL_IE |
                              ADC_CTL_END);    
                              
     //
@@ -180,7 +180,7 @@ main(void)
 
 	while (1)
 	{
-		//
+	    //
 		// Background task: calculate the (approximate) mean of the values in the
 		// circular buffer and display it, together with the sample number.
 		sum = 0;
