@@ -47,7 +47,7 @@ typedef enum {PERCENT=0,
 //*****************************************************************************
 static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample values)
 
-volatile uint8_t slowTick = false;
+volatile uint8_t slowTick = false; // Flag used to refresh the OLED display
 
 //********************************************************
 // Function Definitions
@@ -57,7 +57,7 @@ void SysTickIntHandler() {
     static uint8_t tickCount = 0;
     const uint8_t ticksPerSlow = SYSTICK_RATE_HZ / SLOWTICK_RATE_HZ;
 
-    updateButtons ();       // Poll the buttons
+    updateButtons();       // Poll the buttons
     if (++tickCount >= ticksPerSlow){
         tickCount = 0; // Signal a slow tick
         slowTick = true;
@@ -70,13 +70,12 @@ void SysTickIntHandler() {
 void ADCIntHandler() {
     uint32_t ulValue;
 
-    //
     // Get the single sample from ADC0.  ADC_BASE is defined in
     // inc/hw_memmap.h
     ADCSequenceDataGet(ADC0_BASE, 3, &ulValue);
     //
     // Place it in the circular buffer (advancing write index)
-    writeCircBuf (&g_inBuffer, ulValue);
+    writeCircBuf(&g_inBuffer, ulValue);
     //
     // Clean up, clearing the interrupt
     ADCIntClear(ADC0_BASE, 3);
@@ -88,14 +87,14 @@ initSysTick (void)
 {
     // Set up the period for the SysTick timer.  The SysTick timer period is
     // set as a function of the system clock.
-    SysTickPeriodSet (SysCtlClockGet () / SYSTICK_RATE_HZ);
+    SysTickPeriodSet(SysCtlClockGet () / SYSTICK_RATE_HZ);
     //
     // Register the interrupt handler
-    SysTickIntRegister (SysTickIntHandler);
+    SysTickIntRegister(SysTickIntHandler);
     //
     // Enable interrupt and device
-    SysTickIntEnable ();
-    SysTickEnable ();
+    SysTickIntEnable();
+    SysTickEnable();
 }
 
 void initClock() {
@@ -105,6 +104,7 @@ void initClock() {
 }
 
 void initADC() {
+    // Initialse the buffer used to store the ADC data
     initCircBuf(&g_inBuffer, BUF_SIZE);
 
     // The ADC0 peripheral must be enabled for configuration and use.
@@ -115,7 +115,6 @@ void initADC() {
     // conversion.
     ADCSequenceConfigure(ADC0_BASE, 3, ADC_TRIGGER_PROCESSOR, 0);
 
-    //
     // Configure step 0 on sequence 3.  Sample channel 0 (ADC_CTL_CH0) in
     // single-ended mode (default) and configure the interrupt flag
     // (ADC_CTL_IE) to be set when the sample is done.  Tell the ADC logic
@@ -127,19 +126,15 @@ void initADC() {
     ADCSequenceStepConfigure(ADC0_BASE, 3, 0, ADC_CTL_CH9 | ADC_CTL_IE |
                              ADC_CTL_END);
 
-    //
     // Since sample sequence 3 is now configured, it must be enabled.
     ADCSequenceEnable(ADC0_BASE, 3);
 
-    //
     // Register the interrupt handler
     ADCIntRegister (ADC0_BASE, 3, ADCIntHandler);
 
-    //
     // Enable interrupts for ADC0 sequence 3 (clears any outstanding interrupts)
     ADCIntEnable(ADC0_BASE, 3);
 }
-
 
 void initDisplay() {
     // intialise the Orbit OLED display
@@ -147,6 +142,7 @@ void initDisplay() {
 }
 
 void clearDisplay(){
+    // Function to clear the display by writing empty spaces to each line
     uint8_t i;
     for(i = 0; i < 4; i++){
         OLEDStringDraw ("                ", 0, i);
@@ -154,21 +150,28 @@ void clearDisplay(){
 }
 
 void displayValue(uint16_t ADCvalue, uint16_t minADCVal, displayMode_t mode){
-    int16_t percent = 0;
+    // ADCValue is the current mean value in the adc buffer
+    // minADCVal is the "landed" value of the ADC
+    // mode is the current display mode set by the displayMode_t enum 
     char string[17];
     switch(mode){
     case PERCENT:
+        // Calculate the percentage value
+        int16_t percent = 0;
         percent = (minADCVal - ADCvalue) * 100 / ADC_1V_RANGE;
+        // Display the percentage value on the OLED display
         OLEDStringDraw ("Percent Value:", 0, 0);
         usnprintf (string, sizeof(string),  "%4d %%", percent);
         OLEDStringDraw (string, 0, 1);
         break;
     case ADC_VALUE:
+        // Display the ADC value on the OLED display
         OLEDStringDraw ("Mean ADC Value:", 0, 0);
         usnprintf (string, sizeof(string), "%4d", ADCvalue);
         OLEDStringDraw (string, 0, 1);
         break;
     case OFF:
+        // Clear the OLED display
         clearDisplay();
     }
 }
@@ -183,31 +186,41 @@ int32_t calculateMeanVal(){
 }
 
 int main(){
-    initClock ();
-    initADC ();
-    initButtons ();
-    initDisplay ();
+    // Initialize systems
+    initClock();
+    initADC();
+    initButtons();
+    initDisplay();
     initSysTick();
     IntMasterEnable(); // Enable interrupts to the processor.
 
+    // Local variables
     int32_t minADCVal = 0;
     int32_t meanADCVal = 0;
-    displayMode_t displayMode = ADC_VALUE;
+    displayMode_t displayMode = PERCENT;
 
+    // Delay for ADC buffer to fill
+    SysCtlDelay(SysCtlClockGet() / 4); 
+
+    // Set the initial minADCVal to the initial meanADCVal (starting "landed" value)
     minADCVal = calculateMeanVal();
 
     while(1){
+        // Calculate the mean value of the ADC buffer
         meanADCVal = calculateMeanVal();
 
-        //perform button state functions
-        if(checkButton(LEFT) == RELEASED){
+        // Check for button presses
+        if(checkButton(LEFT) == RELEASED){ 
+            // recalibrated the "landed" value to current meanADCValue
             minADCVal = meanADCVal;
         }
-        if(checkButton(UP) == RELEASED){
+        if(checkButton(UP) == RELEASED){ 
+            // Change the display mode to the next mode in the enum
             clearDisplay();
             displayMode = (displayMode + 1) % ENUM_SIZE;
         }
 
+        // Refresh the OLED display on slow ticks
         if(slowTick){
             displayValue(meanADCVal, minADCVal, displayMode);
             slowTick = false;
