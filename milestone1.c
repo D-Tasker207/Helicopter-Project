@@ -27,11 +27,11 @@
 // Constants
 //*****************************************************************************
 #define BUF_SIZE 25
-#define SAMPLE_RATE_HZ 100
+#define SAMPLE_RATE_HZ 125
 #define ADC_1V_RANGE 1241
 
 #define SYSTICK_RATE_HZ 100
-#define SLOWTICK_RATE_HZ 4
+#define SLOWTICK_RATE_HZ 25
 
 //*****************************************************************************
 // Type Definitions / State Machine
@@ -153,11 +153,11 @@ void displayValue(uint16_t ADCvalue, uint16_t minADCVal, displayMode_t mode){
     // ADCValue is the current mean value in the adc buffer
     // minADCVal is the "landed" value of the ADC
     // mode is the current display mode set by the displayMode_t enum 
+    int16_t percent;
     char string[17];
     switch(mode){
     case PERCENT:
         // Calculate the percentage value
-        int16_t percent = 0;
         percent = (minADCVal - ADCvalue) * 100 / ADC_1V_RANGE;
         // Display the percentage value on the OLED display
         OLEDStringDraw ("Percent Value:", 0, 0);
