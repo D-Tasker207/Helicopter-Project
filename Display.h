@@ -28,9 +28,20 @@
 #include "circBufT.h"
 #include "inc/hw_ints.h"  // Interrupts
 
+#define ADC_1V_RANGE 1241
+
+typedef enum {PERCENT=0,
+              ADC_VALUE,
+              OFF,
+              ENUM_SIZE
+} displayMode_t;
+
+static displayMode_t displayMode = PERCENT;
+
 void initDisplay();
 void clearDisplay();
-void displayValue(uint16_t ADCvalue, uint16_t minADCVal, displayMode_t mode);
+void incAltDisplayMode();
+void displayAlt(uint16_t ADCvalue, uint16_t minADCVal);
 
 
 #endif /* DISPLAY_H_ */

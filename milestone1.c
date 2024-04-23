@@ -39,11 +39,6 @@
 //*****************************************************************************
 // Type Definitions / State Machine
 //*****************************************************************************
-typedef enum {PERCENT=0,
-              ADC_VALUE,
-              OFF,
-              ENUM_SIZE
-} displayMode_t;
 
 //*****************************************************************************
 // Global variables
@@ -149,7 +144,7 @@ int32_t calculateMeanVal(){
     return ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE);
 }
 
-int main(){
+                                                                                   int main(){
     // Initialize systems
     initClock();
     initADC();
@@ -161,7 +156,7 @@ int main(){
     // Local variables
     int32_t minADCVal = 0;
     int32_t meanADCVal = 0;
-    displayMode_t displayMode = PERCENT;
+
 
     // Delay for ADC buffer to fill
     SysCtlDelay(SysCtlClockGet() / 4); 
@@ -181,12 +176,12 @@ int main(){
         if(checkButton(UP) == RELEASED){ 
             // Change the display mode to the next mode in the enum
             clearDisplay();
-            displayMode = (displayMode + 1) % ENUM_SIZE;
+            incAltDisplayMode();
         }
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
-            displayValue(meanADCVal, minADCVal, displayMode);
+            displayAlt(meanADCVal, minADCVal);
             slowTick = false;
         }
     }

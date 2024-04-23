@@ -9,6 +9,9 @@ CMD_SRCS += \
 ../tm4c123gh6pm.cmd 
 
 C_SRCS += \
+../Altitude.c \
+../Display.c \
+../Yaw.c \
 ../buttons4.c \
 ../circBufT.c \
 ../milestone1.c \
@@ -16,6 +19,9 @@ C_SRCS += \
 C:/ti/TivaWare_C_Series-2.2.0.295/utils/ustdlib.c 
 
 C_DEPS += \
+./Altitude.d \
+./Display.d \
+./Yaw.d \
 ./buttons4.d \
 ./circBufT.d \
 ./milestone1.d \
@@ -23,6 +29,9 @@ C_DEPS += \
 ./ustdlib.d 
 
 OBJS += \
+./Altitude.obj \
+./Display.obj \
+./Yaw.obj \
 ./buttons4.obj \
 ./circBufT.obj \
 ./milestone1.obj \
@@ -30,6 +39,9 @@ OBJS += \
 ./ustdlib.obj 
 
 OBJS__QUOTED += \
+"Altitude.obj" \
+"Display.obj" \
+"Yaw.obj" \
 "buttons4.obj" \
 "circBufT.obj" \
 "milestone1.obj" \
@@ -37,6 +49,9 @@ OBJS__QUOTED += \
 "ustdlib.obj" 
 
 C_DEPS__QUOTED += \
+"Altitude.d" \
+"Display.d" \
+"Yaw.d" \
 "buttons4.d" \
 "circBufT.d" \
 "milestone1.d" \
@@ -44,6 +59,9 @@ C_DEPS__QUOTED += \
 "ustdlib.d" 
 
 C_SRCS__QUOTED += \
+"../Altitude.c" \
+"../Display.c" \
+"../Yaw.c" \
 "../buttons4.c" \
 "../circBufT.c" \
 "../milestone1.c" \

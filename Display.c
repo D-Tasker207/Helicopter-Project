@@ -5,6 +5,9 @@
  *      Author: tfo49 & dta82
  */
 
+#include "Display.h"
+
+
 void initDisplay() {
     // intialise the Orbit OLED display
     OLEDInitialise();
@@ -18,13 +21,17 @@ void clearDisplay(){
     }
 }
 
-void displayValue(uint16_t ADCvalue, uint16_t minADCVal, displayMode_t mode){
+void incAltDisplayMode(){
+    displayMode = (displayMode + 1) % ENUM_SIZE;
+}
+
+void displayAlt(uint16_t ADCvalue, uint16_t minADCVal){
     // ADCValue is the current mean value in the adc buffer
     // minADCVal is the "landed" value of the ADC
     // mode is the current display mode set by the displayMode_t enum
     int16_t percent;
     char string[17];
-    switch(mode){
+    switch(displayMode){
     case PERCENT:
         // Calculate the percentage value
         percent = (minADCVal - ADCvalue) * 100 / ADC_1V_RANGE;
