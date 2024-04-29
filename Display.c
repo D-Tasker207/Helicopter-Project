@@ -22,7 +22,7 @@ void clearDisplay(){
 }
 
 void incAltDisplayMode(){
-    displayMode = (displayMode + 1) % ENUM_SIZE;
+    displayMode = (displayMode + 1) % ENUM_SIZE; //increment enum value
 }
 
 void displayAlt(uint16_t ADCvalue, uint16_t minADCVal){
@@ -50,6 +50,18 @@ void displayAlt(uint16_t ADCvalue, uint16_t minADCVal){
         // Clear the OLED display
         clearDisplay();
     }
+}
+
+void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
+    char string[17];
+
+//    OLEDStringDraw ("Altitude:", 0, 0);
+//    usnprintf(string, sizeof(string),  "%4d %%", altPercent);
+//    OLEDStringDraw (string, 0, 1);
+
+    OLEDStringDraw ("Yaw:", 0, 2);
+    usnprintf(string, sizeof(string),  "%d.%d", yawDegrees, yawRemainder);
+    OLEDStringDraw (string, 0, 3);
 }
 
 

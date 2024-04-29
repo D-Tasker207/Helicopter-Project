@@ -42,6 +42,7 @@ void initDisplay();
 void clearDisplay();
 void incAltDisplayMode();
 void displayAlt(uint16_t ADCvalue, uint16_t minADCVal);
+void displayYaw(int16_t yawDegrees, uint8_t yawRemainder);
 
 
 #endif /* DISPLAY_H_ */

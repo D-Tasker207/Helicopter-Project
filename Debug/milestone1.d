@@ -35,6 +35,7 @@ milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/s
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h
 milestone1.obj: ../Altitude.h
 milestone1.obj: ../Yaw.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 
 ../milestone1.c:
 
@@ -105,4 +106,6 @@ C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h:
 ../Altitude.h:
 
 ../Yaw.h:
+
+C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
 

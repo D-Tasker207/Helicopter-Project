@@ -144,12 +144,13 @@ int32_t calculateMeanVal(){
     return ((2 * sum + BUF_SIZE) / 2 / BUF_SIZE);
 }
 
-                                                                                   int main(){
+int main(){
     // Initialize systems
     initClock();
     initADC();
     initButtons();
     initDisplay();
+    initYaw();
     initSysTick();
     IntMasterEnable(); // Enable interrupts to the processor.
 
@@ -182,6 +183,7 @@ int32_t calculateMeanVal(){
         // Refresh the OLED display on slow ticks
         if(slowTick){
             displayAlt(meanADCVal, minADCVal);
+            displayYaw(getYawDegrees(), getYawDecimal());
             slowTick = false;
         }
     }

@@ -5,16 +5,44 @@
  *      Author: tfo49
  */
 
+#include "Yaw.h"
+
+void YawInterruptHandler();
+void calculateState(bool chAState, bool chBState);
+void calculateNumChanges();
 
 void initYaw(){
+    SysCtlPeripheralEnable(YAW_PERIPH);
 
+    GPIOPadConfigSet(YAW_PORT, CHA_PIN | CHB_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+
+    GPIOIntRegister(YAW_PORT, YawInterruptHandler);
+    GPIOIntTypeSet(YAW_PORT, CHA_PIN | CHB_PIN, GPIO_BOTH_EDGES);
+    GPIOIntEnable(YAW_PORT, CHA_PIN | CHB_PIN);
+
+    bool chAState = GPIOPinRead(YAW_PORT, CHA_PIN);
+    bool chBState = GPIOPinRead(YAW_PORT, CHB_PIN);
+
+    calculateState(chAState, chBState);
+    state = state << 4;
+
+    IntEnable(INT_GPIOB);
 }
 
 void YawInterruptHandler(){
     // read GPIO pins into chAState & chBState
+    bool chAState = GPIOPinRead(YAW_PORT, CHA_PIN);
+    bool chBState = GPIOPinRead(YAW_PORT, CHB_PIN);
 
-    state = state << NIBBLE_SIZE;
+    state = state << 4;
 
+    calculateState(chAState, chBState);
+    calculateNumChanges();
+
+    GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
+}
+
+void calculateState(bool chAState, bool chBState){
     if(chAState){
         if(chBState)
            state += 2;
@@ -27,24 +55,22 @@ void YawInterruptHandler(){
         else
             state += 0;
     }
-
-    calculateYaw();
 }
 
-void calculateYaw(){
+void calculateNumChanges(){
     //  And operation masks previous state, right shift operation
-    if ((state && NIBBLE_SIZE) == ((state >> NIBBLE_SIZE) + 1)) //encoder is turning clockwise
+    if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
         numPhaseChanges++;
-    else // encoder is turning anti-clockwise
+    else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
         numPhaseChanges--;
 
     numPhaseChanges %= (NUM_ENCODER_TEETH * NUM_PHASES);
 }
 
 int16_t getYawDegrees(){
-    return (DEG_PER_PHASE_X100 * numPhaseChanges - 180) / 100;
+    return ((DEG_PER_PHASE_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
 }
 
 uint8_t getYawDecimal(){
-    return (uint8_t) ((DEG_PER_PHASE_X100 * numPhaseChanges - 180) % 100;
+    return (uint8_t) ((DEG_PER_PHASE_X100 * numPhaseChanges) % SCALE_FACTOR);
 }

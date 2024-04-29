@@ -26,31 +26,27 @@
 #include "circBufT.h"
 #include "inc/hw_ints.h"  // Interrupts
 
-#define NIBBLE_SIZE 4
+#define YAW_PERIPH SYSCTL_PERIPH_GPIOB
+#define YAW_PORT GPIO_PORTB_BASE
+#define CHA_PIN GPIO_PIN_0
+#define CHB_PIN GPIO_PIN_1
+
+#define LOWER_BIT_MASK 0x0F
 
 #define NUM_ENCODER_TEETH 112
 #define NUM_PHASES 4
 #define DEG_PER_PHASE_X100 81
 #define SCALE_FACTOR 100
 
-static bool chAState = 0;
-static bool chBState = 0;
-
 /*
  * upper 4 bits are used for previous state, lower four bits are used for current state
  * to change state, shift left 4 times, then just add phase value (00 = 0, 01 = 1, 11 = 2, 10 = 3)
  */
-static uint8_t state;
-
+static uint8_t state = 0;
 static int16_t numPhaseChanges;
 
 void initYaw();
-void YawInterruptHandler();
-void calculateYaw();
 int16_t getYawDegrees();
-
-
-
-
+uint8_t getYawDecimal();
 
 #endif /* YAW_H_ */
