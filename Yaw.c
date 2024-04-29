@@ -64,13 +64,13 @@ void calculateNumChanges(){
     else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
         numPhaseChanges--;
 
-    numPhaseChanges %= (NUM_ENCODER_TEETH * NUM_PHASES);
+    numPhaseChanges %= (NUM_ENCODER_SLOTS);
 }
 
 int16_t getYawDegrees(){
-    return ((DEG_PER_PHASE_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
+    return ((SLOTS_PER_DEGREE_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
 }
 
 uint8_t getYawDecimal(){
-    return (uint8_t) ((DEG_PER_PHASE_X100 * numPhaseChanges) % SCALE_FACTOR);
+    return (uint8_t) ((SLOTS_PER_DEGREE_X100 * numPhaseChanges) % SCALE_FACTOR);
 }

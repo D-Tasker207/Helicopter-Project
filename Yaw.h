@@ -12,18 +12,13 @@
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
-#include "driverlib/adc.h"
-#include "driverlib/pwm.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/systick.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/debug.h"
 #include "utils/ustdlib.h"
-#include "OrbitOLED/OrbitOLEDInterface.h"
 #include "stdlib.h"
-#include "buttons4.h"
-#include "circBufT.h"
 #include "inc/hw_ints.h"  // Interrupts
 
 #define YAW_PERIPH SYSCTL_PERIPH_GPIOB
@@ -33,9 +28,9 @@
 
 #define LOWER_BIT_MASK 0x0F
 
-#define NUM_ENCODER_TEETH 112
 #define NUM_PHASES 4
-#define DEG_PER_PHASE_X100 81
+#define NUM_ENCODER_SLOTS 112
+#define SLOTS_PER_DEGREE_X100 36000 / 112
 #define SCALE_FACTOR 100
 
 /*

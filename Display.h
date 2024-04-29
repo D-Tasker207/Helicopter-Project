@@ -14,8 +14,6 @@
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
-#include "driverlib/adc.h"
-#include "driverlib/pwm.h"
 #include "driverlib/gpio.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/systick.h"
@@ -24,8 +22,6 @@
 #include "utils/ustdlib.h"
 #include "OrbitOLED/OrbitOLEDInterface.h"
 #include "stdlib.h"
-#include "buttons4.h"
-#include "circBufT.h"
 #include "inc/hw_ints.h"  // Interrupts
 
 #define ADC_1V_RANGE 1241
