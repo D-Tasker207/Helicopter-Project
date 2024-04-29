@@ -56,7 +56,7 @@ void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
     char string[17];
 
     OLEDStringDraw ("Yaw:", 0, 2);
-    usnprintf(string, sizeof(string),  "%d.%d", yawDegrees, yawRemainder);
+    usnprintf(string, sizeof(string),  "%4d.%02d", yawDegrees, yawRemainder);
     OLEDStringDraw (string, 0, 3);
 }
 

@@ -68,9 +68,14 @@ void calculateNumChanges(){
 }
 
 int16_t getYawDegrees(){
-    return ((SLOTS_PER_DEGREE_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
+    int16_t angle = ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
+
+    if(angle < -180) { angle += 360; }
+    else if (angle > 180) {angle -= 360; }
+
+    return angle;
 }
 
 uint8_t getYawDecimal(){
-    return (uint8_t) ((SLOTS_PER_DEGREE_X100 * numPhaseChanges) % SCALE_FACTOR);
+    return (uint8_t) ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) % SCALE_FACTOR);
 }
