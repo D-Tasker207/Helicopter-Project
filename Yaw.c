@@ -34,6 +34,7 @@ void YawInterruptHandler(){
     bool chAState = GPIOPinRead(YAW_PORT, CHA_PIN);
     bool chBState = GPIOPinRead(YAW_PORT, CHB_PIN);
 
+    //shift old state to upper four bits, setting the lower four bits as 0
     state = state << 4;
 
     calculateState(chAState, chBState);
@@ -70,6 +71,7 @@ void calculateNumChanges(){
 int16_t getYawDegrees(){
     int16_t angle = ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
 
+    //Subtract or add a full rotation from the angle if it exceeds the bounds of -180<x<180
     if(angle < -180) { angle += 360; }
     else if (angle > 180) {angle -= 360; }
 
