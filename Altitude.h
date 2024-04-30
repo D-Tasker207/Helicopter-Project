@@ -33,7 +33,7 @@ static circBuf_t g_inBuffer;        // Buffer of size BUF_SIZE integers (sample 
 void initADC();
 void ADCIntHandler();
 int32_t calculateMeanAltVal();
-int16_t getAltPercent();
+int16_t getAltPercent(int32_t currentADCVal, int32_t zeroPercentVal);
 void setLandedVal();
 
 #endif /* ALTITUDE_H_ */

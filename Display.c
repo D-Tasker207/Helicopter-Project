@@ -25,7 +25,7 @@ void displayAlt(int16_t altPercent){
     char string[17];
 
     OLEDStringDraw ("Altitude:", 0, 0);
-    usnprintf (string, sizeof(string),  "%3d %%", altPercent);
+    usnprintf (string, sizeof(string),  "%3d %%     ", altPercent);
     OLEDStringDraw (string, 0, 1);
 }
 
@@ -33,7 +33,7 @@ void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
     char string[17];
 
     OLEDStringDraw ("Yaw:", 0, 2);
-    usnprintf(string, sizeof(string),  "%4d.%02d", yawDegrees, yawRemainder);
+    usnprintf(string, sizeof(string),  "%4d.%02d Deg    ", yawDegrees, yawRemainder);
     OLEDStringDraw (string, 0, 3);
 }
 

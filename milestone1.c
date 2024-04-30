@@ -91,12 +91,11 @@ int main(){
     int32_t landedAlt = 0;
     int32_t currentAlt = 0;
 
-
     // Delay for ADC buffer to fill
     SysCtlDelay(SysCtlClockGet() / 4); 
 
     // Set the initial minADCVal to the initial meanADCVal (starting "landed" value)
-    currentAlt = calculateMeanAltVal();
+    landedAlt = calculateMeanAltVal();
 
     while(1){
         // Calculate the mean value of the ADC buffer
@@ -110,7 +109,7 @@ int main(){
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
-            displayAlt(meanADCVal, minADCVal);
+            displayAlt(getAltPercent(currentAlt, landedAlt));
             displayYaw(getYawDegrees(), getYawDecimal());
             slowTick = false;
         }
