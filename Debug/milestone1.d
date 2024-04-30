@@ -29,11 +29,12 @@ milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/x
 milestone1.obj: P:/Courses/ENCE361/labs/OrbitOLED/OrbitOLEDInterface.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 milestone1.obj: ../buttons4.h
-milestone1.obj: ../circBufT.h
 milestone1.obj: ../Display.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h
 milestone1.obj: ../Altitude.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
+milestone1.obj: ../circBufT.h
 milestone1.obj: ../Yaw.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 
@@ -95,8 +96,6 @@ C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
 
 ../buttons4.h:
 
-../circBufT.h:
-
 ../Display.h:
 
 C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
@@ -104,6 +103,10 @@ C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
 C:/ti/TivaWare_C_Series-2.2.0.295/inc/hw_ints.h:
 
 ../Altitude.h:
+
+C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
+
+../circBufT.h:
 
 ../Yaw.h:
 
