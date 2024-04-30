@@ -110,12 +110,8 @@ int main(){
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
-<<<<<<< HEAD
             displayAlt(meanADCVal, minADCVal);
             displayYaw(getYawDegrees(), getYawDecimal());
-=======
-            displayAlt(getAltPercent(currentAlt, landedAlt));
->>>>>>> 340f3dd3c91b829a6ebf621d86f4b1e3269bd4b9
             slowTick = false;
         }
     }
