@@ -38,32 +38,6 @@ void YawInterruptHandler(){
     state = state << 4;
 
     //    calculateState(chAState, chBState);
-        if(chAState){
-            if(chBState)
-               state += 2;
-            else
-               state += 3;
-        }
-        else{
-            if(chBState)
-                state += 1;
-            else
-                state += 0;
-        }
-    //    calculateNumChanges();
-        if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
-            numPhaseChanges++;
-        else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
-            numPhaseChanges--;
-
-        numPhaseChanges %= (NUM_ENCODER_SLOTS);
-
-        GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
-
-    GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
-}
-
-void calculateState(bool chAState, bool chBState){
     if(chAState){
         if(chBState)
            state += 2;
@@ -76,17 +50,41 @@ void calculateState(bool chAState, bool chBState){
         else
             state += 0;
     }
-}
-
-void calculateNumChanges(){
-    //  And operation masks previous state, right shift operation
+    //    calculateNumChanges();
     if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
         numPhaseChanges++;
     else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
         numPhaseChanges--;
 
     numPhaseChanges %= (NUM_ENCODER_SLOTS * NUM_PHASES);
+
+    GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
 }
+
+//void calculateState(bool chAState, bool chBState){
+//    if(chAState){
+//        if(chBState)
+//           state += 2;
+//        else
+//           state += 3;
+//    }
+//    else{
+//        if(chBState)
+//            state += 1;
+//        else
+//            state += 0;
+//    }
+//}
+//
+//void calculateNumChanges(){
+//    //  And operation masks previous state, right shift operation
+//    if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
+//        numPhaseChanges++;
+//    else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
+//        numPhaseChanges--;
+//
+//    numPhaseChanges %= (NUM_ENCODER_SLOTS * NUM_PHASES);
+//}
 
 int16_t getYawDegrees(){
     int16_t angle = ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
