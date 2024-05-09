@@ -74,6 +74,15 @@ initButtons (void)
        GPIO_PIN_TYPE_STD_WPU);
     but_normal[RIGHT] = RIGHT_BUT_NORMAL;
 
+    SysCtlPeripheralEnable(SWITCH1_PERIPH);
+    GPIOPinTypeGPIOInput(SWITCH1_PORT_BASE, SWITCH1_PIN);
+    GPIOPadConfigSet(SWITCH1_PORT_BASE, SWITCH1_PIN, GPIO_STRENGTH_2MA,
+                     GPIO_PIN_TYPE_STD_WPD);
+    GPIOIntRegister(SWITCH1_PORT_BASE, SwitchIntHandler);
+    GPIOIntTypeSet(SWITCH1_PORT_BASE, SWITCH1_PIN, GPIO_BOTH_EDGES);
+    GPIOIntEnable(SWITCH1_PORT_BASE, SWITCH1_PIN);
+    but_normal[SWITCH1] = SWITCH1_NORMAL;
+
 	for (i = 0; i < NUM_BUTS; i++)
 	{
 		but_state[i] = but_normal[i];
@@ -119,11 +128,11 @@ updateButtons (void)
         	but_count[i] = 0;
 	}
 }
-
-// *******************************************************
-// checkButton: Function returns the new button logical state if the button
-// logical state (PUSHED or RELEASED) has changed since the last call,
-// otherwise returns NO_CHANGE.
+//
+//// *******************************************************
+//// checkButton: Function returns the new button logical state if the button
+//// logical state (PUSHED or RELEASED) has changed since the last call,
+//// otherwise returns NO_CHANGE.
 uint8_t
 checkButton (uint8_t butName)
 {
@@ -137,4 +146,6 @@ checkButton (uint8_t butName)
 	}
 	return NO_CHANGE;
 }
+
+void buttonInterrupt
 
