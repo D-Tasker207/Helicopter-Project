@@ -23,8 +23,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-#define MAX_STRING_LEN 88
-
+// UART configuration constants
 #define BAUD_RATE 9600
 #define UART_BASE UART0_BASE
 #define UART_PERIPH_UART SYSCTL_PERIPH_UART0

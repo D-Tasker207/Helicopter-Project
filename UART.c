@@ -7,6 +7,8 @@
 
 #include "UART.h"
 
+// initialise uart communication protocol
+// must call before attempting to send data over serial connection
 void initUART(){
     SysCtlPeripheralEnable(UART_PERIPH_UART);
     SysCtlPeripheralEnable(UART_PERIPH_GPIO);
@@ -24,7 +26,9 @@ void initUART(){
 }
 
 
+// dataBuffer contains string to be sent over UART connection
 void UARTSend(char* dataBuffer){
+    // loop over dataBuffer and transmit on char at a time
     while(*dataBuffer){
         UARTCharPut(UART_BASE, *dataBuffer);
         dataBuffer++;
