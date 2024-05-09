@@ -23,6 +23,7 @@
 #include "Display.h"
 #include "Altitude.h"
 #include "Yaw.h"
+#include "UART.h"
 #include "inc/hw_ints.h"  // Interrupts
 
 //*****************************************************************************
@@ -85,6 +86,7 @@ int main(){
     initButtons();
     initDisplay();
     initYaw();
+    initUART();
     initSysTick();
     IntMasterEnable(); // Enable interrupts to the processor.
 
@@ -111,7 +113,11 @@ int main(){
         if(slowTick){
             displayAlt(getAltPercent(currentAlt, landedAlt));
             displayYaw(getYawDegrees(), getYawDecimal());
+            char* data = "Hello World!";
+            UARTSend(data);
             slowTick = false;
+
+
         }
     }
 }
