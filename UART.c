@@ -25,7 +25,7 @@ void initUART(){
 
 
 void UARTSend(char* dataBuffer){
-    while(dataBuffer){
+    while(*dataBuffer){
         UARTCharPut(UART_BASE, *dataBuffer);
         dataBuffer++;
     }

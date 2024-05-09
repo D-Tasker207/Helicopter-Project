@@ -113,8 +113,6 @@ int main(){
         if(slowTick){
             displayAlt(getAltPercent(currentAlt, landedAlt));
             displayYaw(getYawDegrees(), getYawDecimal());
-            char* data = "Hello World!";
-            UARTSend(data);
             slowTick = false;
 
 
