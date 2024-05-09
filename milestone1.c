@@ -103,6 +103,8 @@ int main(){
         // Calculate the mean value of the ADC buffer
         currentAlt = calculateMeanAltVal();
 
+        if(checkButton(RESET) == RELEASED) SysCtlReset();
+
 //        if(checkButton(LEFT) == RELEASED) UARTSend("Left Button Pressed\n\r");
 //        if(checkButton(RIGHT) == RELEASED) UARTSend("Right Button Pressed\n\r");
 //        if(checkButton(UP) == RELEASED) UARTSend("Up Button Pressed\n\r");
@@ -115,11 +117,7 @@ int main(){
             displayAlt(getAltPercent(currentAlt, landedAlt));
             displayYaw(getYawDegrees(), getYawDecimal());
 
-
-
             slowTick = false;
-
-
         }
     }
 }

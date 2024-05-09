@@ -106,6 +106,7 @@ updateButtons (void)
 	but_value[DOWN] = (GPIOPinRead (DOWN_BUT_PORT_BASE, DOWN_BUT_PIN) == DOWN_BUT_PIN);
     but_value[LEFT] = (GPIOPinRead (LEFT_BUT_PORT_BASE, LEFT_BUT_PIN) == LEFT_BUT_PIN);
     but_value[RIGHT] = (GPIOPinRead (RIGHT_BUT_PORT_BASE, RIGHT_BUT_PIN) == RIGHT_BUT_PIN);
+    but_value[RESET] = (GPIOPinRead (RESET_BUT_PORT_BASE, RESET_BUT_PIN) == RESET_BUT_PIN);
     but_value[SWITCH1] = (GPIOPinRead (SWITCH1_PORT_BASE, SWITCH1_PIN) == SWITCH1_PIN);
 
 	// Iterate through the buttons, updating button variables as required
