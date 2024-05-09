@@ -37,6 +37,11 @@ milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/s
 milestone1.obj: ../circBufT.h
 milestone1.obj: ../Yaw.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
+milestone1.obj: ../UART.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/uart.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pin_map.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdio.h
 
 ../milestone1.c:
 
@@ -111,4 +116,14 @@ C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
 ../Yaw.h:
 
 C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
+
+../UART.h:
+
+C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/uart.h:
+
+C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pin_map.h:
+
+C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
+
+C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdio.h:
 
