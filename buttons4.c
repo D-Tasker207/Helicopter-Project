@@ -24,8 +24,6 @@
 #include "driverlib/debug.h"
 #include "inc/tm4c123gh6pm.h"  // Board specific defines (for PF0)
 #include "buttons4.h"
-
-
 // *******************************************************
 // Globals to module
 // *******************************************************
@@ -78,9 +76,6 @@ initButtons (void)
     GPIOPinTypeGPIOInput(SWITCH1_PORT_BASE, SWITCH1_PIN);
     GPIOPadConfigSet(SWITCH1_PORT_BASE, SWITCH1_PIN, GPIO_STRENGTH_2MA,
                      GPIO_PIN_TYPE_STD_WPD);
-    GPIOIntRegister(SWITCH1_PORT_BASE, SwitchIntHandler);
-    GPIOIntTypeSet(SWITCH1_PORT_BASE, SWITCH1_PIN, GPIO_BOTH_EDGES);
-    GPIOIntEnable(SWITCH1_PORT_BASE, SWITCH1_PIN);
     but_normal[SWITCH1] = SWITCH1_NORMAL;
 
 	for (i = 0; i < NUM_BUTS; i++)
@@ -111,6 +106,8 @@ updateButtons (void)
 	but_value[DOWN] = (GPIOPinRead (DOWN_BUT_PORT_BASE, DOWN_BUT_PIN) == DOWN_BUT_PIN);
     but_value[LEFT] = (GPIOPinRead (LEFT_BUT_PORT_BASE, LEFT_BUT_PIN) == LEFT_BUT_PIN);
     but_value[RIGHT] = (GPIOPinRead (RIGHT_BUT_PORT_BASE, RIGHT_BUT_PIN) == RIGHT_BUT_PIN);
+    but_value[SWITCH1] = (GPIOPinRead (SWITCH1_PORT_BASE, SWITCH1_PIN) == SWITCH1_PIN);
+
 	// Iterate through the buttons, updating button variables as required
 	for (i = 0; i < NUM_BUTS; i++)
 	{
@@ -133,9 +130,7 @@ updateButtons (void)
 //// checkButton: Function returns the new button logical state if the button
 //// logical state (PUSHED or RELEASED) has changed since the last call,
 //// otherwise returns NO_CHANGE.
-uint8_t
-checkButton (uint8_t butName)
-{
+uint8_t checkButton (uint8_t butName) {
 	if (but_flag[butName])
 	{
 		but_flag[butName] = false;
@@ -147,5 +142,7 @@ checkButton (uint8_t butName)
 	return NO_CHANGE;
 }
 
-void buttonInterrupt
+uint8_t checkSwitch(uint8_t switchName){
+    return (but_state[switchName] == but_normal[switchName]) ? INACTIVE : ACTIVE;
+}
 
