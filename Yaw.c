@@ -90,8 +90,8 @@ int16_t getYawDegrees(){
     int16_t angle = ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
 
     //Subtract or add a full rotation from the angle if it exceeds the bounds of -180<x<180
-    if(angle < -180) { angle += 360; }
-    else if (angle > 180) {angle -= 360; }
+    if(angle <= -180) { angle += 360; }
+    else if (angle => 180) {angle -= 360; }
 
     return angle;
 }
