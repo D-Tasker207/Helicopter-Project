@@ -23,6 +23,8 @@
 #include "Display.h"
 #include "Altitude.h"
 #include "Yaw.h"
+#include "PID.h"
+#include "PWM.h"
 #include "inc/hw_ints.h"  // Interrupts
 
 //*****************************************************************************
@@ -85,32 +87,40 @@ int main(){
     initButtons();
     initDisplay();
     initYaw();
+    initMotorPWM();
     initSysTick();
     IntMasterEnable(); // Enable interrupts to the processor.
 
     int32_t landedAlt = 0;
     int32_t currentAlt = 0;
+    int32_t currentYaw = 0;
+    int32_t currentYawDec = 0;
+
+    int32_t altSetpoint = 0;
+    int32_t yawSetpoint = 0;
+    int32_t yawDec = 0;
 
     // Delay for ADC buffer to fill
     SysCtlDelay(SysCtlClockGet() / 4); 
 
     // Set the initial minADCVal to the initial meanADCVal (starting "landed" value)
-    landedAlt = calculateMeanAltVal();
+    landedAlt = calculateMeanAltVal(),  landedAlt;
 
     while(1){
         // Calculate the mean value of the ADC buffer
-        currentAlt = calculateMeanAltVal();
+        currentAlt = getAltPercent(calculateMeanAltVal(), landedAlt);
+        currentYaw = getYawDegrees();
+        currentYawDec = getYawDecimal();
 
         // Check for button presses
         if(checkButton(LEFT) == RELEASED){ 
-            // recalibrated the "landed" value to current meanADCValue
-            landedAlt = calculateMeanAltVal();
+
         }
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
-            displayAlt(getAltPercent(currentAlt, landedAlt));
-            displayYaw(getYawDegrees(), getYawDecimal());
+            displayAlt(currentAlt);
+            displayYaw(currentYaw, currentYawDec);
             slowTick = false;
         }
     }

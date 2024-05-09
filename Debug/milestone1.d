@@ -37,6 +37,11 @@ milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/s
 milestone1.obj: ../circBufT.h
 milestone1.obj: ../Yaw.h
 milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
+milestone1.obj: ../PID.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
+milestone1.obj: ../PWM.h
+milestone1.obj: C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pin_map.h
+milestone1.obj: C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h
 
 ../milestone1.c:
 
@@ -109,6 +114,16 @@ C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
 ../circBufT.h:
 
 ../Yaw.h:
+
+C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
+
+../PID.h:
+
+C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
+
+../PWM.h:
+
+C:/ti/TivaWare_C_Series-2.2.0.295/driverlib/pin_map.h:
 
 C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdlib.h:
 
