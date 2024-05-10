@@ -103,19 +103,21 @@ int main(){
         // Calculate the mean value of the ADC buffer
         currentAlt = calculateMeanAltVal();
 
-        // Check for button presses
-        if(checkButton(LEFT) == RELEASED){ 
-            // recalibrated the "landed" value to current meanADCValue
-            landedAlt = calculateMeanAltVal();
-        }
+        if(checkButton(RESET) == RELEASED) SysCtlReset();
+
+//        if(checkButton(LEFT) == RELEASED) UARTSend("Left Button Pressed\n\r");
+//        if(checkButton(RIGHT) == RELEASED) UARTSend("Right Button Pressed\n\r");
+//        if(checkButton(UP) == RELEASED) UARTSend("Up Button Pressed\n\r");
+//        if(checkButton(DOWN) == RELEASED) UARTSend("Down Button Pressed\n\r");
+//        if(checkSwitch(SWITCH1) == ACTIVE) UARTSend("Switch Button is now up\n\r");
+//        if(checkSwitch(SWITCH1) == INACTIVE) UARTSend("Switch Button is now down\n\r");
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
             displayAlt(getAltPercent(currentAlt, landedAlt));
             displayYaw(getYawDegrees(), getYawDecimal());
+
             slowTick = false;
-
-
         }
     }
 }
