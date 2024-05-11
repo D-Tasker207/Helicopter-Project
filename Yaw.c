@@ -8,6 +8,7 @@
 #include "Yaw.h"
 
 void YawInterruptHandler();
+void YawReferenceInterruptHandler(){
 void calculateState(bool chAState, bool chBState);
 void calculateNumChanges();
 
@@ -19,6 +20,14 @@ void initYaw(){
     GPIOIntRegister(YAW_PORT, YawInterruptHandler);
     GPIOIntTypeSet(YAW_PORT, CHA_PIN | CHB_PIN, GPIO_BOTH_EDGES);
     GPIOIntEnable(YAW_PORT, CHA_PIN | CHB_PIN);
+
+    SysCtlPeripherEnable(YAW_REF_PERIPH);
+
+    GPIOPadConfigSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+
+    GPIOIntRegister(YAW_REF_PORT, YawReferenceInterruptHandler);
+    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_FALLING_EDGE);
+    GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
 
     bool chAState = GPIOPinRead(YAW_PORT, CHA_PIN);
     bool chBState = GPIOPinRead(YAW_PORT, CHB_PIN);
@@ -48,6 +57,11 @@ void YawInterruptHandler(){
     numPhaseChanges %= (NUM_ENCODER_SLOTS * NUM_PHASES);
 
     GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
+}
+
+void YawReferenceInterruptHandler(){
+    numPhaseChanges = 0;
+    GPIOIntClear(YAW_REF_PORT, YAW_REF_PIN);
 }
 
 void calculateState(bool chAState, bool chBState){
