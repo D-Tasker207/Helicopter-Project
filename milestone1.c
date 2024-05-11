@@ -109,8 +109,8 @@ int main(){
 //        if(checkButton(RIGHT) == RELEASED) UARTSend("Right Button Pressed\n\r");
 //        if(checkButton(UP) == RELEASED) UARTSend("Up Button Pressed\n\r");
 //        if(checkButton(DOWN) == RELEASED) UARTSend("Down Button Pressed\n\r");
-//        if(checkSwitch(SWITCH1) == ACTIVE) UARTSend("Switch Button is now up\n\r");
-//        if(checkSwitch(SWITCH1) == INACTIVE) UARTSend("Switch Button is now down\n\r");
+        if(checkButton(SWITCH1) == PUSHED) UARTSend("Switch Button has been pushed\n\r");
+        if(checkButton(SWITCH1) == RELEASED) UARTSend("Switch Button has been released\n\r");
 
         // Refresh the OLED display on slow ticks
         if(slowTick){

@@ -24,15 +24,15 @@ void clearDisplay(){
 void displayAlt(int16_t altPercent){
     char string[17];
 
-    usnprintf (string, sizeof(string),  "Alt: %3d %%   " altPercent);
-    OLEDStringDraw (string, 0, 0);
+    usnprintf(string, sizeof(string),  "Alt: %3d %%   ", altPercent);
+    OLEDStringDraw(string, 0, 0);
 }
 
 void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
     char string[17];
 
     usnprintf(string, sizeof(string),  "Yaw: %4d.%02d Deg  ", yawDegrees, yawRemainder);
-    OLEDStringDraw (string, 0, 1);
+    OLEDStringDraw(string, 0, 1);
 }
 
 void displayMainPWM(uint32_t pwmDutyCycle){

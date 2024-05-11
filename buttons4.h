@@ -22,7 +22,6 @@
 //*****************************************************************************
 enum butNames {UP = 0, DOWN, LEFT, RIGHT, RESET, SWITCH1, NUM_BUTS};
 enum butStates {RELEASED = 0, PUSHED, NO_CHANGE};
-enum switchStates {INACTIVE = 0, ACTIVE};
 // UP button
 #define UP_BUT_PERIPH  SYSCTL_PERIPH_GPIOE
 #define UP_BUT_PORT_BASE  GPIO_PORTE_BASE
@@ -31,7 +30,8 @@ enum switchStates {INACTIVE = 0, ACTIVE};
 // DOWN button
 #define DOWN_BUT_PERIPH  SYSCTL_PERIPH_GPIOD
 #define DOWN_BUT_PORT_BASE  GPIO_PORTD_BASE
-#define DOWN_BUT_PIN  GPIO_PIN_2#define DOWN_BUT_NORMAL  false
+#define DOWN_BUT_PIN  GPIO_PIN_2
+#define DOWN_BUT_NORMAL  false
 // LEFT button
 #define LEFT_BUT_PERIPH  SYSCTL_PERIPH_GPIOF
 #define LEFT_BUT_PORT_BASE  GPIO_PORTF_BASE
@@ -77,8 +77,6 @@ void updateButtons (void);
 // NO_CHANGE.  The argument butName should be one of constants in the
 // enumeration butStates, excluding 'NUM_BUTS'. Safe under interrupt.
 uint8_t checkButton (uint8_t butName);
-
-uint8_t checkSwitch(uint8_t switchName){
 
 
 #endif /*BUTTONS_H_*/

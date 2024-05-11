@@ -8,7 +8,7 @@
 #include "Yaw.h"
 
 void YawInterruptHandler();
-void YawReferenceInterruptHandler(){
+void YawReferenceInterruptHandler();
 void calculateState(bool chAState, bool chBState);
 void calculateNumChanges();
 
@@ -85,16 +85,6 @@ void calculateState(bool chAState, bool chBState){
             state += 0;
     }
 }
-//
-//void calculateNumChanges(){
-//    //  And operation masks previous state, right shift operation
-//    if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
-//        numPhaseChanges++;
-//    else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
-//        numPhaseChanges--;
-//
-//    numPhaseChanges %= (NUM_ENCODER_SLOTS * NUM_PHASES);
-//}
 
 int16_t getYawDegrees(){
     int16_t angle = ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;

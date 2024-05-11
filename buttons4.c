@@ -142,8 +142,3 @@ uint8_t checkButton (uint8_t butName) {
 	}
 	return NO_CHANGE;
 }
-
-uint8_t checkSwitch(uint8_t switchName){
-    return (but_state[switchName] == but_normal[switchName]) ? INACTIVE : ACTIVE;
-}
-
