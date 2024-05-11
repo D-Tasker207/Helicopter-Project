@@ -44,6 +44,8 @@
 static uint8_t state = 0;
 static int16_t numPhaseChanges;
 
+volatile static bool isYawCalibrated = false;
+
 void initYaw();
 int16_t getYawDegrees();
 uint8_t getYawDecimal();

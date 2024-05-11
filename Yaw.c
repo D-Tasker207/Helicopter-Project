@@ -68,6 +68,7 @@ void YawReferenceInterruptHandler(){
     // indicating the helicopter is at 0 yaw so it resets the number of
     // phase changes from the 0 point back to 0
     numPhaseChanges = 0;
+    isYawCalibrated = true;
     GPIOIntClear(YAW_REF_PORT, YAW_REF_PIN);
 }
 

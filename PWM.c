@@ -16,8 +16,6 @@ void initPWM(uint32_t PERIPH_PWM, uint32_t PERIPH_GPIO, uint32_t GPIO_CONFIG, ui
 
     PWMGenConfigure(PWM_BASE, PWM_GEN, PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
     PWMGenEnable(PWM_BASE, PWM_GEN);
-
-    PWMOutputState(PWM_BASE, PWM_OUTBIT, true);
 }
 
 void initMotorPWM(){
@@ -40,4 +38,22 @@ void SetTailPWM(uint32_t controlEffort){
     SetPWM(controlEffort, TAIL_BASE, TAIL_GEN, TAIL_OUTNUM);
 }
 
+void enablePWM(uint32_t pwmBase, uint32_t pwmOutbit){
+    PWMOutputState(pwmBase, pwmOutbit, true);
+}
 
+void disablePWM(uint32_t pwmBase, uint32_t pwmOutbit){
+    PWMOutputState(pwmBase, pwmOutbit, false);
+}
+
+void toggleRotors(){
+    if(!isRotorEnabled){
+        enablePWM(MAIN_BASE, MAIN_OUTBIT);
+        enablePWM(TAIL_BASE, TAIL_OUTBIT);
+    }
+    else{
+        disablePWM(MAIN_BASE, MAIN_OUTBIT);
+        disablePWM(TAIL_BASE, TAIL_OUTBIT);
+    }
+
+}
