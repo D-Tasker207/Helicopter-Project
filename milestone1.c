@@ -25,6 +25,7 @@
 #include "Yaw.h"
 #include "PID.h"
 #include "PWM.h"
+#include "UART.h"
 #include "inc/hw_ints.h"  // Interrupts
 
 //*****************************************************************************
@@ -88,6 +89,7 @@ int main(){
     initDisplay();
     initYaw();
     initMotorPWM();
+    initUART();
     initSysTick();
     IntMasterEnable(); // Enable interrupts to the processor.
 
@@ -112,16 +114,21 @@ int main(){
         currentYaw = getYawDegrees();
         currentYawDec = getYawDecimal();
 
-        // Check for button presses
-        if(checkButton(LEFT) == RELEASED){ 
+        if(checkButton(RESET) == RELEASED) SysCtlReset();
 
-        }
+//        if(checkButton(LEFT) == RELEASED) UARTSend("Left Button Pressed\n\r");
+//        if(checkButton(RIGHT) == RELEASED) UARTSend("Right Button Pressed\n\r");
+//        if(checkButton(UP) == RELEASED) UARTSend("Up Button Pressed\n\r");
+//        if(checkButton(DOWN) == RELEASED) UARTSend("Down Button Pressed\n\r");
+        if(checkButton(SWITCH1) == PUSHED) UARTSend("Switch Button has been pushed\n\r");
+        if(checkButton(SWITCH1) == RELEASED) UARTSend("Switch Button has been released\n\r");
+
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
             displayAlt(currentAlt);
             displayYaw(currentYaw, currentYawDec);
-            slowTick = false;
+
         }
     }
 }

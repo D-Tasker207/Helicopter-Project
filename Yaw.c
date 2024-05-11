@@ -8,10 +8,12 @@
 #include "Yaw.h"
 
 void YawInterruptHandler();
+void YawReferenceInterruptHandler();
 void calculateState(bool chAState, bool chBState);
 void calculateNumChanges();
 
 void initYaw(){
+    // Enable the two quad encoding pins
     SysCtlPeripheralEnable(YAW_PERIPH);
 
     GPIOPadConfigSet(YAW_PORT, CHA_PIN | CHB_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
@@ -20,6 +22,17 @@ void initYaw(){
     GPIOIntTypeSet(YAW_PORT, CHA_PIN | CHB_PIN, GPIO_BOTH_EDGES);
     GPIOIntEnable(YAW_PORT, CHA_PIN | CHB_PIN);
 
+    // Enable Yaw Reference pin
+    SysCtlPeripheralEnable(YAW_REF_PERIPH);
+
+    GPIOPadConfigSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+
+    GPIOIntRegister(YAW_REF_PORT, YawReferenceInterruptHandler);
+    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_FALLING_EDGE);
+    GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
+    IntEnable(INT_GPIOC);
+
+    // Read initial state of quad pins to prepare for recording yaw
     bool chAState = GPIOPinRead(YAW_PORT, CHA_PIN);
     bool chBState = GPIOPinRead(YAW_PORT, CHB_PIN);
 
@@ -37,7 +50,7 @@ void YawInterruptHandler(){
     //shift old state to upper four bits, setting the lower four bits as 0
     state = state << 4;
 
-        calculateState(chAState, chBState);
+    calculateState(chAState, chBState);
 
     if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
         numPhaseChanges++;
@@ -47,6 +60,15 @@ void YawInterruptHandler(){
     numPhaseChanges %= (NUM_ENCODER_SLOTS * NUM_PHASES);
 
     GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
+}
+
+
+void YawReferenceInterruptHandler(){
+    // Function is triggered when yaw reference slot is passed over,
+    // indicating the helicopter is at 0 yaw so it resets the number of
+    // phase changes from the 0 point back to 0
+    numPhaseChanges = 0;
+    GPIOIntClear(YAW_REF_PORT, YAW_REF_PIN);
 }
 
 void calculateState(bool chAState, bool chBState){
@@ -70,6 +92,7 @@ int16_t getYawDegrees(){
     //Subtract or add a full rotation from the angle if it exceeds the bounds of -180<x<180
     if(angle <= -180) { angle += 360; }
     else if (angle >= 180) { angle -= 360; }
+
 
     return angle;
 }
