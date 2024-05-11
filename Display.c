@@ -38,14 +38,14 @@ void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
 void displayMainPWM(uint32_t pwmDutyCycle){
     char string[17];
 
-    usnprintf(string, sizeof(string),  "Main Duty%%: %02d %%", pwmDutyCycle);
+    usnprintf(string, sizeof(string),  "Main Duty%%: %02d %%   ", pwmDutyCycle);
     OLEDStringDraw(string, 0, 2);
 }
 
 void displayTailPWM(uint32_t pwmDutyCycle){
     char string[17];
 
-    usnprintf(string, sizeof(string),  "Tail Duty%%: %02d %%", pwmDutyCycle);
+    usnprintf(string, sizeof(string),  "Tail Duty%%: %02d %%    ", pwmDutyCycle);
     OLEDStringDraw(string, 0, 3);
 }
 
