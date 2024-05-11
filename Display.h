@@ -28,5 +28,7 @@ void initDisplay();
 void clearDisplay();
 void displayYaw(int16_t yawDegrees, uint8_t yawRemainder);
 void displayAlt(int16_t altPercent);
+void displayMainPWM(uint32_t pwmDutyCycle);
+void displayTailPWM(uint32_t pwmDutyCycle);
 
 #endif /* DISPLAY_H_ */
