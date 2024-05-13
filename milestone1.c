@@ -135,7 +135,7 @@ int main(){
     landedAlt = calculateMeanAltVal();
 
     while(1){
-        if(checkButton(RESET) == RELEASED) SysCtlReset();
+        if(checkButton(RESET) == PUSHED) SysCtlReset();
 
         switch(currentState){
         case(LANDED):
@@ -154,32 +154,27 @@ int main(){
             if(stateShift){
                 stateShift = false;
                 isYawCalibrated = false;
+                enableYawRefInt();
             }
 
-            // if yaw is calibrated and helicopter is at the takeoff
-            // setpoint transition to FLYING state
-            if((currentAlt == TAKEOFF_SETPOINT) && isYawCalibrated) {
+//            // ease setpoint up to TAKEOFF_ALT
+            if(altSetpoint < TAKEOFF_SETPOINT){
+                altSetpoint++;
+            }
+            else if(!isYawCalibrated){ // wait until altitude is calibrated before calibrating yaw
+                // spin until yaw is calibrated
+                yawSetpoint = currentYaw + YAW_REF_INCREMENT;
+                yawSetpoint = (yawSetpoint >= 180) ? yawSetpoint - 360 : yawSetpoint;
+            }
+            else{
+                yawSetpoint = 0; //when yaw is calibrated adjust the setpoint to be zeroed as well
+                disableYawRefInt();
                 stateShift = true;
                 currentState = FLYING;
             }
 
-            // ease setpoint up to TAKEOFF_ALT
-            if(altSetpoint < TAKEOFF_SETPOINT){
-                altSetpoint++;
-            }
-            else { // wait until altitude is calibrated before calibrating yaw
-                // spin until yaw is calibrated
-                if(!isYawCalibrated){
-                    yawSetpoint += YAW_REF_INCREMENT;
-                    yawSetpoint = (yawSetpoint >= 180) ? yawSetpoint - 360 : yawSetpoint;
-                }
-                else{ //when yaw is calibrated adjust the setpoint to be zeroed as well
-                    yawSetpoint = 0;
-                }
-            }
-
-            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt) + 35;
-            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw) + (mainControlEffort * 0.8);
+            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt) + 33;
+            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw); //+ (mainControlEffort * 0.8)
 
             SetMainPWM(mainControlEffort);
             SetTailPWM(tailControlEffort);
@@ -256,7 +251,7 @@ int main(){
             //write code to send data over UART
             char string[88];
             usnprintf(string, sizeof(string),  "\rState: %d, YawSet: %d, AltSet: %d\n, MainIErr: %d, TailIErr: %d", (int)currentState, yawSetpoint, altSetpoint, intErrMain, intErrTail);
-//            usnprintf(string, sizeof(string),  "\rCurrent Yaw: %d, Yaw Setpoint: %d", currentYaw, yawSetpoint);
+//            usnprintf(string, sizeof(string),  "\rState: %d, YawSet: %d, AltSet: %d\n, isYawCalibated = %d", (int)currentState, yawSetpoint, altSetpoint, isYawCalibrated);
             UARTSend(string);
         }
     }

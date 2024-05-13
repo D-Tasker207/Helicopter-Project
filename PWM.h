@@ -50,9 +50,6 @@
 #define TAIL_GPIO_CONFIG GPIO_PF1_M1PWM5
 #define TAIL_GPIO_PIN GPIO_PIN_1
 
-// Static variables
-static bool isRotorEnabled = false;
-
 void initMotorPWM();
 void SetMainPWM(uint32_t controlEffort);
 void SetTailPWM(uint32_t controlEffort);

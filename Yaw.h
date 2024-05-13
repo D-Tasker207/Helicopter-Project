@@ -41,13 +41,13 @@
  * upper 4 bits are used for previous state, lower four bits are used for current state
  * to change state, shift left 4 times, then just add phase value (00 = 0, 01 = 1, 11 = 2, 10 = 3)
  */
-static uint8_t state = 0;
-static int16_t numPhaseChanges;
 
-volatile static bool isYawCalibrated = false;
+volatile bool isYawCalibrated;
 
 void initYaw();
 int16_t getYawDegrees();
 uint8_t getYawDecimal();
+void enableYawRefInt();
+void disableYawRefInt();
 
 #endif /* YAW_H_ */

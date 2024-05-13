@@ -24,11 +24,11 @@
 #define CONTROL_SCALE_FACTOR 100
 
 #define KP_MAIN 500
-#define KI_MAIN 0
+#define KI_MAIN 20
 #define KD_MAIN 0
 
 #define KP_TAIL 300
-#define KI_TAIL 0
+#define KI_TAIL 20
 #define KD_TAIL 0
 
 #define DELTA_T 10
@@ -36,10 +36,8 @@
 #define CNTRL_MAX 98
 #define CNTRL_MIN 2
 
-static int32_t intErrMain = 0;
-static int32_t intErrTail = 0;
-static int32_t sensorPrevMain = 0;
-static int32_t sensorPrevTail = 0;
+extern int32_t intErrMain;
+extern int32_t intErrTail;
 
 int32_t controllerUpdateMain (int32_t setpoint, int32_t sensorReading);
 int32_t controllerUpdateTail (int32_t setpoint, int32_t sensorReading);

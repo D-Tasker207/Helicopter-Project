@@ -12,6 +12,9 @@ void YawReferenceInterruptHandler();
 void calculateState(bool chAState, bool chBState);
 void calculateNumChanges();
 
+static uint8_t state = 0;
+static int16_t numPhaseChanges;
+
 void initYaw(){
     // Enable the two quad encoding pins
     SysCtlPeripheralEnable(YAW_PERIPH);
@@ -28,7 +31,7 @@ void initYaw(){
     GPIOPadConfigSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
     GPIOIntRegister(YAW_REF_PORT, YawReferenceInterruptHandler);
-    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_BOTH_EDGES);
+    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_RISING_EDGE);
     GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
     IntEnable(INT_GPIOC);
 
@@ -100,4 +103,12 @@ int16_t getYawDegrees(){
 
 uint8_t getYawDecimal(){
     return (uint8_t) ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) % SCALE_FACTOR);
+}
+
+void enableYawRefInt(){
+    GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
+}
+
+void disableYawRefInt(){
+    GPIOIntDisable(YAW_REF_PORT, YAW_REF_PIN);
 }

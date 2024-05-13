@@ -7,6 +7,10 @@
 
 #include "PWM.h"
 
+
+// Static variables
+static bool isRotorEnabled = false;
+
 void initPWM(uint32_t PERIPH_PWM, uint32_t PERIPH_GPIO, uint32_t GPIO_CONFIG, uint32_t GPIO_BASE, uint32_t GPIO_PIN, uint32_t PWM_BASE, uint32_t PWM_GEN, uint32_t PWM_OUTBIT){
     SysCtlPeripheralEnable(PERIPH_PWM);
     SysCtlPeripheralEnable(PERIPH_GPIO);
