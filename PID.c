@@ -42,7 +42,6 @@ int32_t controllerUpdateTail(int32_t setpoint, int32_t sensorReading){
     sensorPrevMain = sensorReading;
 
 //    controlEffort = max(min(CNTRL_MAX, controlEffort), CNTRL_MIN);
-    //    controlEffort = max(min(CNTRL_MAX, controlEffort), CNTRL_MIN);
     if (controlEffort > CNTRL_MAX) controlEffort = CNTRL_MAX;
     else if (controlEffort < CNTRL_MIN) controlEffort = CNTRL_MIN;
     else intErrMain += dI;
