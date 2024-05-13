@@ -28,7 +28,7 @@ void initYaw(){
     GPIOPadConfigSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
     GPIOIntRegister(YAW_REF_PORT, YawReferenceInterruptHandler);
-    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_FALLING_EDGE);
+    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_BOTH_EDGES);
     GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
     IntEnable(INT_GPIOC);
 

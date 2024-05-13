@@ -24,8 +24,7 @@
 #include "inc/hw_ints.h"
 
 #define SYSTICK_RATE_HZ 100
-#define PWM_RATE_HZ 100
-#define PWM_DIVIDER 4
+#define PWM_RATE_HZ 225
 
 #define PWM_DIVISOR 100
 

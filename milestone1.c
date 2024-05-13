@@ -51,6 +51,7 @@
 // Global variables
 //*****************************************************************************
 volatile uint8_t slowTick = false; // Flag used to refresh the OLED display
+volatile uint8_t oneMSFlag = false;
 
 enum HelicopterStates{
     LANDED = 0,
@@ -157,28 +158,28 @@ int main(){
 
             // if yaw is calibrated and helicopter is at the takeoff
             // setpoint transition to FLYING state
-            if((currentAlt != TAKEOFF_SETPOINT) && isYawCalibrated){
+            if((currentAlt == TAKEOFF_SETPOINT) && isYawCalibrated) {
                 stateShift = true;
                 currentState = FLYING;
             }
 
             // ease setpoint up to TAKEOFF_ALT
-            if(currentAlt != TAKEOFF_SETPOINT){
+            if(altSetpoint < TAKEOFF_SETPOINT){
                 altSetpoint++;
             }
-            else{ // wait until altitude is calibrated before calibrating yaw
+            else { // wait until altitude is calibrated before calibrating yaw
                 // spin until yaw is calibrated
                 if(!isYawCalibrated){
                     yawSetpoint += YAW_REF_INCREMENT;
-                    yawSetpoint = (yawSetpoint >= -180) ? yawSetpoint - 360 : yawSetpoint;
+                    yawSetpoint = (yawSetpoint >= 180) ? yawSetpoint - 360 : yawSetpoint;
                 }
                 else{ //when yaw is calibrated adjust the setpoint to be zeroed as well
                     yawSetpoint = 0;
                 }
             }
 
-            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt);
-            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw);
+            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt) + 35;
+            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw) + (mainControlEffort * 0.8);
 
             SetMainPWM(mainControlEffort);
             SetTailPWM(tailControlEffort);
@@ -192,7 +193,7 @@ int main(){
             }
             if(checkButton(RIGHT) == RELEASED){
                 yawSetpoint += YAW_INCREMENT;
-                yawSetpoint = (yawSetpoint >= -180) ? yawSetpoint - 360 : yawSetpoint;
+                yawSetpoint = (yawSetpoint >= 180) ? yawSetpoint - 360 : yawSetpoint;
             }
             if(checkButton(UP) == RELEASED)
                 altSetpoint = min(MAX_ALT, altSetpoint + ALT_INCREMENT);
@@ -253,8 +254,9 @@ int main(){
             displayTailPWM(tailControlEffort);
 
             //write code to send data over UART
-            char string[17];
-            usnprintf(string, sizeof(string),  "\rCurrent State :: %d\n", (int)currentState);
+            char string[88];
+            usnprintf(string, sizeof(string),  "\rState: %d, YawSet: %d, AltSet: %d\n, MainIErr: %d, TailIErr: %d", (int)currentState, yawSetpoint, altSetpoint, intErrMain, intErrTail);
+//            usnprintf(string, sizeof(string),  "\rCurrent Yaw: %d, Yaw Setpoint: %d", currentYaw, yawSetpoint);
             UARTSend(string);
         }
     }

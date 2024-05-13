@@ -24,7 +24,7 @@ void initMotorPWM(){
 }
 
 void SetPWM(uint32_t controlEffort, uint32_t PWM_BASE, uint32_t PWM_GEN, uint32_t PWM_OUTNUM){
-    uint32_t pwmPeriod = SysCtlClockGet() / PWM_DIVIDER / PWM_RATE_HZ;
+    uint32_t pwmPeriod = SysCtlClockGet() / PWM_RATE_HZ;
 
     PWMGenPeriodSet(PWM_BASE, PWM_GEN, pwmPeriod);
     PWMPulseWidthSet(PWM_BASE, PWM_OUTNUM, pwmPeriod * controlEffort / PWM_DIVISOR);
