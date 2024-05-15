@@ -10,6 +10,8 @@
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
+uint32_t mainControlEffort = 0;
+uint32_t tailControlEffort = 0;
 int32_t intErrMain = 0;
 int32_t intErrTail = 0;
 int32_t sensorPrevMain = 0;
@@ -24,6 +26,8 @@ int32_t controllerUpdateMain (int32_t setpoint, int32_t sensorReading){
     int32_t controlEffort = (P + (intErrMain + dI) + D) / CONTROL_SCALE_FACTOR;
     sensorPrevMain = sensorReading;
 
+    controlEffort += GRAVITY_OFFSET;
+
 //    controlEffort = max(min(CNTRL_MAX, controlEffort), CNTRL_MIN);
     if (controlEffort > CNTRL_MAX) controlEffort = CNTRL_MAX;
     else if (controlEffort < CNTRL_MIN) controlEffort = CNTRL_MIN;
@@ -35,8 +39,8 @@ int32_t controllerUpdateMain (int32_t setpoint, int32_t sensorReading){
 int32_t controllerUpdateTail(int32_t setpoint, int32_t sensorReading){
     int32_t error = setpoint - sensorReading;
 
-    error = (error <= -180) ? error + 360 : error;
-    error = (error >= 180) ? error - 360 : error;
+    error = (error < -180) ? error + 360 : error;
+    error = (error > 180) ? error - 360 : error;
 
     int32_t P = KP_TAIL * error;
     int32_t dI = KI_TAIL * error / DELTA_T;
@@ -44,6 +48,8 @@ int32_t controllerUpdateTail(int32_t setpoint, int32_t sensorReading){
 
     int32_t controlEffort = (P + (intErrTail + dI) + D) / CONTROL_SCALE_FACTOR;
     sensorPrevMain = sensorReading;
+
+    controlEffort += (8 * mainControlEffort) / 10;
 
 //    controlEffort = max(min(CNTRL_MAX, controlEffort), CNTRL_MIN);
     if (controlEffort > CNTRL_MAX) controlEffort = CNTRL_MAX;

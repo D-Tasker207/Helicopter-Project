@@ -24,10 +24,11 @@
 #define CONTROL_SCALE_FACTOR 100
 
 #define KP_MAIN 500
-#define KI_MAIN 20
+#define KI_MAIN 50
 #define KD_MAIN 0
+#define GRAVITY_OFFSET 33
 
-#define KP_TAIL 300
+#define KP_TAIL 100
 #define KI_TAIL 20
 #define KD_TAIL 0
 
@@ -35,6 +36,9 @@
 
 #define CNTRL_MAX 98
 #define CNTRL_MIN 2
+
+extern uint32_t mainControlEffort;
+extern uint32_t tailControlEffort;
 
 extern int32_t intErrMain;
 extern int32_t intErrTail;

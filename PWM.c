@@ -54,10 +54,12 @@ void toggleRotors(){
     if(!isRotorEnabled){
         enablePWM(MAIN_BASE, MAIN_OUTBIT);
         enablePWM(TAIL_BASE, TAIL_OUTBIT);
+        isRotorEnabled = true;
     }
     else{
         disablePWM(MAIN_BASE, MAIN_OUTBIT);
         disablePWM(TAIL_BASE, TAIL_OUTBIT);
+        isRotorEnabled = false;
     }
 
 }

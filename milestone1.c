@@ -125,8 +125,6 @@ int main(){
     int32_t altSetpoint = 0;
     int32_t yawSetpoint = 0;
 
-    int32_t mainControlEffort = 0;
-    int32_t tailControlEffort = 0;
 
     // Delay for ADC buffer to fill
     SysCtlDelay(SysCtlClockGet() / 4); 
@@ -141,6 +139,7 @@ int main(){
         case(LANDED):
             if(stateShift){
                 toggleRotors();
+                stateShift = false;
             }
 
             if(checkButton(SWITCH1) == PUSHED){
@@ -168,19 +167,21 @@ int main(){
             }
             else{
                 yawSetpoint = 0; //when yaw is calibrated adjust the setpoint to be zeroed as well
-                disableYawRefInt();
+//                disableYawRefInt();
                 stateShift = true;
                 currentState = FLYING;
             }
 
-            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt) + 33;
-            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw); //+ (mainControlEffort * 0.8)
+            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt);
+            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw);
 
             SetMainPWM(mainControlEffort);
             SetTailPWM(tailControlEffort);
 
             break;
         case(FLYING):
+            if(yawSetpoint == currentYaw) intErrTail = 0; //zero integral error when we hit the setpoint to reduce overshoot
+
 
             if(checkButton(LEFT) == RELEASED){
                 yawSetpoint -= YAW_INCREMENT;
@@ -208,6 +209,8 @@ int main(){
 
             break;
         case(LANDING):
+            if(yawSetpoint == currentYaw) intErrTail = 0; //zero integral error when we hit the setpoint to reduce overshoot
+
             if(stateShift){
                 stateShift = false;
                 altSetpoint = TAKEOFF_SETPOINT;
@@ -221,7 +224,7 @@ int main(){
             }
 
             // zero yaw before descending
-            if(currentAlt == TAKEOFF_SETPOINT){
+            if(currentAlt == TAKEOFF_SETPOINT && currentYaw != 0){
                 yawSetpoint = 0;
             }
             else if(currentAlt > MIN_ALT && currentYaw == 0){
@@ -250,7 +253,7 @@ int main(){
 
             //write code to send data over UART
             char string[88];
-            usnprintf(string, sizeof(string),  "\rState: %d, YawSet: %d, AltSet: %d\n, MainIErr: %d, TailIErr: %d", (int)currentState, yawSetpoint, altSetpoint, intErrMain, intErrTail);
+            usnprintf(string, sizeof(string),  "\r%d, YawSet: %d, YawCur: %d, AltSet: %d, AltCur:%d, MainIErr: %d, TailIErr: %d\n", (int)currentState, yawSetpoint, currentYaw, altSetpoint, currentAlt, intErrMain, intErrTail);
 //            usnprintf(string, sizeof(string),  "\rState: %d, YawSet: %d, AltSet: %d\n, isYawCalibated = %d", (int)currentState, yawSetpoint, altSetpoint, isYawCalibrated);
             UARTSend(string);
         }
