@@ -53,11 +53,12 @@
 #define YAW_INCREMENT 15
 
 #define max(a, b) (((a) > (b)) ? (a) : (b))
-#define min(a, b) (((a) < (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b)) // Macros for MIN and MAX
 
 //*****************************************************************************
 // Global variables
 //*****************************************************************************
+
 volatile uint8_t slowTick = false; // Flag used to refresh the OLED display
 volatile uint8_t oneMSFlag = false;
 
@@ -73,6 +74,7 @@ enum HelicopterStates{
 //********************************************************
 
 void SysTickIntHandler() {
+    //System tick interrupt handler
     static uint8_t tickCount = 0;
     const uint8_t ticksPerSlow = SYSTICK_RATE_HZ / SLOWTICK_RATE_HZ;
 
@@ -87,6 +89,7 @@ void SysTickIntHandler() {
 }
 
 //*******************************************************************
+
 void
 initSysTick (void)
 {
@@ -141,8 +144,12 @@ int main(){
     landedAlt = calculateMeanAltVal();
 
     while(1){
-        if(checkButton(RESET) == PUSHED) SysCtlReset();
+        if(checkButton(RESET) == PUSHED) SysCtlReset(); //If reset button is pushed, reset the system
 
+
+//===============================================================
+// Finite State Machine
+//===============================================================
         switch(currentState){
         case(LANDED):
             if(stateShift){
@@ -193,6 +200,7 @@ int main(){
         case(FLYING):
             if(yawSetpoint == currentYaw) intErrTail = 0; //zero integral error when we hit the setpoint to reduce overshoot
 
+            //Check if buttons pressed to change yaw and altitude setpoints
 
             if(checkButton(LEFT) == RELEASED){
                 yawSetpoint -= YAW_INCREMENT;
@@ -249,6 +257,7 @@ int main(){
             SetTailPWM(tailControlEffort);
             break;
         }
+//===============================================================
 
         // Calculate the mean value of the ADC buffer
         currentAlt = getAltPercent(calculateMeanAltVal(), landedAlt);

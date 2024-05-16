@@ -15,7 +15,7 @@
 
 
 void initDisplay() {
-    // intialise the Orbit OLED display
+    // Intialise the Orbit OLED display
     OLEDInitialise();
 }
 
@@ -28,6 +28,7 @@ void clearDisplay(){
 }
 
 void displayAlt(int16_t altPercent){
+    // Display altitude as a percentage on the Orbit OLED display
     char string[17];
 
     usnprintf(string, sizeof(string),  "Alt: %3d %%   ", altPercent);
@@ -35,6 +36,7 @@ void displayAlt(int16_t altPercent){
 }
 
 void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
+    // Display yaw in degrees on the Orbit OLED display
     char string[17];
 
     usnprintf(string, sizeof(string),  "Yaw: %4d.%02d Deg  ", yawDegrees, yawRemainder);
@@ -42,6 +44,7 @@ void displayYaw(int16_t yawDegrees, uint8_t yawRemainder){
 }
 
 void displayMainPWM(uint32_t pwmDutyCycle){
+    //Display Main motor PWM duty cycle on the Orbit OLED display
     char string[17];
 
     usnprintf(string, sizeof(string),  "Main Duty%%: %02d %%   ", pwmDutyCycle);
@@ -49,6 +52,7 @@ void displayMainPWM(uint32_t pwmDutyCycle){
 }
 
 void displayTailPWM(uint32_t pwmDutyCycle){
+    //Display Tail motor PWM duty cycle on the Orbit OLED display
     char string[17];
 
     usnprintf(string, sizeof(string),  "Tail Duty%%: %02d %%    ", pwmDutyCycle);
