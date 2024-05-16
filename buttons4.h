@@ -1,18 +1,20 @@
-#ifndef BUTTONS_H_
-#define BUTTONS_H_
-
 // *******************************************************
+//
 // buttons4.h
 //
-// Support for a set of FOUR specific buttons on the Tiva/Orbit.
-// ENCE361 sample code.
-// The buttons are:  UP and DOWN (on the Orbit daughterboard) plus
-// LEFT and RIGHT on the Tiva.
+// Defines interface with buttons module
+// Stores constants for initialisation of GPIO pins.
+// Defines default states for button behaviour.
 //
-// P.J. Bones UCECE
-// Last modified:  7.2.2018
-// 
+// Authored by tfo49 & dta82
+// With sample code by P.J. Bones UCECE from ENCE361 labs
+//
+// Created 23/04/2024
+//
 // *******************************************************
+
+#ifndef BUTTONS_H_
+#define BUTTONS_H_
 
 #include <stdint.h>
 #include <stdbool.h>

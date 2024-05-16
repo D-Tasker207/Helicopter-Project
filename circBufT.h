@@ -1,16 +1,20 @@
+// *******************************************************
+//
+// circBufT.h
+//
+// Handles interface for the circular buffer.
+// Manages buffer structure, attributes and behaviour.
+//
+// Fiddled with by tfo49 & dta82
+// With sample code by P.J. Bones UCECE from ENCE361 labs
+//
+// Created 23/04/2024
+//
+// *******************************************************
+
 #ifndef CIRCBUFT_H_
 #define CIRCBUFT_H_
 
-// *******************************************************
-// 
-// circBufT.h
-//
-// Support for a circular buffer of uint32_t values on the 
-//  Tiva processor.
-// P.J. Bones UCECE
-// Last modified:  7.3.2017
-// 
-// *******************************************************
 #include <stdint.h>
 
 // *******************************************************

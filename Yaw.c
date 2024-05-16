@@ -1,9 +1,15 @@
-/*
- * Yaw.c
- *
- *  Created on: 23/04/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// Yaw.c
+//
+// Initialises Yaw module and calculates helicopter Yaw using the quadrature encoder data.
+// Handles Yaw data input interrupt.s
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include "Yaw.h"
 
@@ -12,6 +18,10 @@ void YawReferenceInterruptHandler();
 void calculateState(bool chAState, bool chBState);
 void calculateNumChanges();
 
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 static uint8_t state = 0;
 static int16_t numPhaseChanges;
 

@@ -1,9 +1,17 @@
-/*
- * milestone1.c
- *
- *  Created on: 18/03/2024
- *      Author: tfo49 & dta82
- */
+// *******************************************************
+//
+// milestone1.c
+//
+// Handles helicopter behaviour by monitoring altitude and yaw calculated with peripheral functions.
+// Manages control effort output to motors to drive the helicopter.
+// Contains the flight control FSM
+// Passes control parameters to UART & Display.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include <stdint.h>
 #include <stdbool.h>

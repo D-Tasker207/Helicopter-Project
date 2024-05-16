@@ -1,11 +1,22 @@
-/*
- * PID.c
- *
- *  Created on: 9/05/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// PID.c
+//
+// Dictates control effort using a PI control scheme.
+// Takes data from altitude ADC and yaw Quadrature encoder to
+// calculate motor duty cycles for main and tail rotors.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include "PID.h"
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -17,6 +28,8 @@ int32_t intErrTail = 0;
 int32_t sensorPrevMain = 0;
 int32_t sensorPrevTail = 0;
 
+
+//
 int32_t controllerUpdateMain (int32_t setpoint, int32_t sensorReading){
     int32_t error = setpoint - sensorReading;
     int32_t P = KP_MAIN * error;

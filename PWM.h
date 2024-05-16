@@ -1,9 +1,14 @@
-/*
- * PWM.h
- *
- *  Created on: 9/05/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// PWM.h
+//
+// Stores constants and define interface for PWM module
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #ifndef PWM_H
 #define PWM_H
@@ -23,6 +28,10 @@
 #include "stdlib.h"
 #include "inc/hw_ints.h"
 
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 #define SYSTICK_RATE_HZ 100
 #define PWM_RATE_HZ 225
 

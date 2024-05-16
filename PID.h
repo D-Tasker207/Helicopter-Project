@@ -1,9 +1,15 @@
-/*
- * PID.h
- *
- *  Created on: 9/05/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// PID.h
+//
+// Handles interface with PID module.
+// Stores constants including gains for PID calculations.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #ifndef PID_H_
 #define PID_H_
@@ -20,6 +26,11 @@
 #include "utils/ustdlib.h"
 #include "stdlib.h"
 #include "inc/hw_ints.h"
+
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 
 #define CONTROL_SCALE_FACTOR 100
 

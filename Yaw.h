@@ -1,10 +1,14 @@
-/*
- * Yaw.h
- *
- *  Created on: 23/04/2024
- *      Author: tfo49
- */
-
+// *******************************************************
+//
+// Yaw.h
+//
+//
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 #ifndef YAW_H_
 #define YAW_H_
 
@@ -21,6 +25,10 @@
 #include "stdlib.h"
 #include "inc/hw_ints.h"  // Interrupts
 
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 #define YAW_PERIPH SYSCTL_PERIPH_GPIOB
 #define YAW_PORT GPIO_PORTB_BASE
 #define CHA_PIN GPIO_PIN_0

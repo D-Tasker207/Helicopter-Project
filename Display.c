@@ -1,9 +1,15 @@
-/*
- * Display.h
- *
- *  Created on: 23/04/2024
- *      Author: tfo49 & dta82
- */
+// *******************************************************
+//
+// Display.c
+//
+// Displays characters on the Orbit OLED display.
+// Contains functions for displaying each parameter.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include "Display.h"
 

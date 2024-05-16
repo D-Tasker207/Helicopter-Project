@@ -1,10 +1,16 @@
-/*
- * PWM.c
- *
- *  Created on: 9/05/2024
- *      Author: tfo49
- */
-
+// *******************************************************
+//
+// PWM.c
+//
+// Initialises PWM outputs.
+// Manages the PWM output used to drive the motors.
+// Handles rotor enabling and disabling.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 #include "PWM.h"
 
 
