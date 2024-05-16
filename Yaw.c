@@ -22,7 +22,12 @@ void calculateNumChanges();
 //*****************************************************************************
 // Constants
 //*****************************************************************************
+/*
+ * upper 4 bits are used for previous state, lower four bits are used for current state
+ * to change state, shift left 4 times, then just add phase value (00 = 0, 01 = 1, 11 = 2, 10 = 3)
+ */
 static uint8_t state = 0;
+
 static int16_t numPhaseChanges;
 
 void initYaw(){
@@ -35,7 +40,7 @@ void initYaw(){
     GPIOIntTypeSet(YAW_PORT, CHA_PIN | CHB_PIN, GPIO_BOTH_EDGES);
     GPIOIntEnable(YAW_PORT, CHA_PIN | CHB_PIN);
 
-    // Enable Yaw Reference pin
+    // Enable Yaw Reference pin and set up interrupt
     SysCtlPeripheralEnable(YAW_REF_PERIPH);
 
     GPIOPadConfigSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
@@ -86,6 +91,7 @@ void YawReferenceInterruptHandler(){
 }
 
 void calculateState(bool chAState, bool chBState){
+    // adds the current state to the state variable based on the encoding of chAState and chBState
     if(chAState){
         if(chBState)
            state += 2;
@@ -101,20 +107,22 @@ void calculateState(bool chAState, bool chBState){
 }
 
 int16_t getYawDegrees(){
+    //converts the current number of state changes to integer number of degrees (-180 < x < 180)
     int16_t angle = ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) / SCALE_FACTOR) % 360;
 
     //Subtract or add a full rotation from the angle if it exceeds the bounds of -180<x<180
     if(angle <= -180) { angle += 360; }
     else if (angle >= 180) { angle -= 360; }
 
-
     return angle;
 }
 
 uint8_t getYawDecimal(){
+    //returns the number of decimal degrees with two sf of precision
     return (uint8_t) ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) % SCALE_FACTOR);
 }
 
+// functions used in testing to enable or disable the yaw reference interrupt handler
 void enableYawRefInt(){
     GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
 }

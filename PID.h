@@ -48,11 +48,19 @@
 #define CNTRL_MAX 98
 #define CNTRL_MIN 2
 
+//*****************************************************************************
+// Public variables
+//*****************************************************************************
+
 extern uint32_t mainControlEffort;
 extern uint32_t tailControlEffort;
 
 extern int32_t intErrMain;
 extern int32_t intErrTail;
+
+//*****************************************************************************
+// Public functions
+//*****************************************************************************
 
 int32_t controllerUpdateMain (int32_t setpoint, int32_t sensorReading);
 int32_t controllerUpdateTail (int32_t setpoint, int32_t sensorReading);

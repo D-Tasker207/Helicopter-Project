@@ -32,7 +32,6 @@
 //*****************************************************************************
 // Constants
 //*****************************************************************************
-// UART configuration constants
 #define BAUD_RATE 9600
 #define UART_BASE UART0_BASE
 #define UART_PERIPH_UART SYSCTL_PERIPH_UART0
@@ -41,6 +40,10 @@
 #define UART_GPIO_PIN_REC GPIO_PIN_0
 #define UART_GPIO_PIN_TRX GPIO_PIN_1
 #define UART_GPIO_PINS UART_GPIO_PIN_REC | UART_GPIO_PIN_TRX
+
+//*****************************************************************************
+// Public functions
+//*****************************************************************************
 
 void initUART();
 void UARTSend(char* dataBuffer);

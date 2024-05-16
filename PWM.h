@@ -59,6 +59,10 @@
 #define TAIL_GPIO_CONFIG GPIO_PF1_M1PWM5
 #define TAIL_GPIO_PIN GPIO_PIN_1
 
+//*****************************************************************************
+// Public functions
+//*****************************************************************************
+
 void initMotorPWM();
 void SetMainPWM(uint32_t controlEffort);
 void SetTailPWM(uint32_t controlEffort);

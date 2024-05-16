@@ -45,12 +45,15 @@
 #define DEGREE_PER_SLOTS_X100 36000 / 448
 #define SCALE_FACTOR 100
 
-/*
- * upper 4 bits are used for previous state, lower four bits are used for current state
- * to change state, shift left 4 times, then just add phase value (00 = 0, 01 = 1, 11 = 2, 10 = 3)
- */
+//*****************************************************************************
+// Public variables
+//*****************************************************************************
 
 volatile bool isYawCalibrated;
+
+//*****************************************************************************
+// Public functions
+//*****************************************************************************
 
 void initYaw();
 int16_t getYawDegrees();
