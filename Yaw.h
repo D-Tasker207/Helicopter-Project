@@ -1,10 +1,14 @@
-/*
- * Yaw.h
- *
- *  Created on: 23/04/2024
- *      Author: tfo49
- */
-
+// *******************************************************
+//
+// Yaw.h
+//
+//
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 #ifndef YAW_H_
 #define YAW_H_
 
@@ -21,6 +25,10 @@
 #include "stdlib.h"
 #include "inc/hw_ints.h"  // Interrupts
 
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 #define YAW_PERIPH SYSCTL_PERIPH_GPIOB
 #define YAW_PORT GPIO_PORTB_BASE
 #define CHA_PIN GPIO_PIN_0
@@ -41,11 +49,13 @@
  * upper 4 bits are used for previous state, lower four bits are used for current state
  * to change state, shift left 4 times, then just add phase value (00 = 0, 01 = 1, 11 = 2, 10 = 3)
  */
-static uint8_t state = 0;
-static int16_t numPhaseChanges;
+
+volatile bool isYawCalibrated;
 
 void initYaw();
 int16_t getYawDegrees();
 uint8_t getYawDecimal();
+void enableYawRefInt();
+void disableYawRefInt();
 
 #endif /* YAW_H_ */

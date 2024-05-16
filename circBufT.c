@@ -1,12 +1,15 @@
 // *******************************************************
-// 
+//
 // circBufT.c
 //
-// Support for a circular buffer of uint32_t values on the 
-//  Tiva processor.
-// P.J. Bones UCECE
-// Last modified:  8.3.2017
-// 
+// Handles data storage from the ADC by averaging in a circular buffer.
+// Passes data back to Altitude.c for calculation.
+//
+// Fiddled with by tfo49 & dta82
+// With sample code by P.J. Bones UCECE from ENCE361 labs
+//
+// Created 23/04/2024
+//
 // *******************************************************
 
 #include <stdint.h>

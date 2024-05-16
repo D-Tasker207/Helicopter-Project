@@ -1,9 +1,15 @@
-/*
- * Yaw.c
- *
- *  Created on: 23/04/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// Yaw.c
+//
+// Initialises Yaw module and calculates helicopter Yaw using the quadrature encoder data.
+// Handles Yaw data input interrupt.s
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include "Yaw.h"
 
@@ -11,6 +17,13 @@ void YawInterruptHandler();
 void YawReferenceInterruptHandler();
 void calculateState(bool chAState, bool chBState);
 void calculateNumChanges();
+
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
+static uint8_t state = 0;
+static int16_t numPhaseChanges;
 
 void initYaw(){
     // Enable the two quad encoding pins
@@ -28,7 +41,7 @@ void initYaw(){
     GPIOPadConfigSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
     GPIOIntRegister(YAW_REF_PORT, YawReferenceInterruptHandler);
-    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_FALLING_EDGE);
+    GPIOIntTypeSet(YAW_REF_PORT, YAW_REF_PIN, GPIO_RISING_EDGE);
     GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
     IntEnable(INT_GPIOC);
 
@@ -52,7 +65,6 @@ void YawInterruptHandler(){
 
     calculateState(chAState, chBState);
 
-    //    calculateNumChanges();
     if ((state & LOWER_BIT_MASK) == (((state >> 4) + 1) % NUM_PHASES)) //encoder is turning clockwise
         numPhaseChanges++;
     else if ((state & LOWER_BIT_MASK) == (((state >> 4) - 1) % NUM_PHASES))// encoder is turning anti-clockwise
@@ -63,11 +75,13 @@ void YawInterruptHandler(){
     GPIOIntClear(YAW_PORT, CHA_PIN | CHB_PIN);
 }
 
+
 void YawReferenceInterruptHandler(){
     // Function is triggered when yaw reference slot is passed over,
     // indicating the helicopter is at 0 yaw so it resets the number of
     // phase changes from the 0 point back to 0
     numPhaseChanges = 0;
+    isYawCalibrated = true;
     GPIOIntClear(YAW_REF_PORT, YAW_REF_PIN);
 }
 
@@ -91,11 +105,20 @@ int16_t getYawDegrees(){
 
     //Subtract or add a full rotation from the angle if it exceeds the bounds of -180<x<180
     if(angle <= -180) { angle += 360; }
-    else if (angle >= 180) {angle -= 360; }
+    else if (angle >= 180) { angle -= 360; }
+
 
     return angle;
 }
 
 uint8_t getYawDecimal(){
     return (uint8_t) ((DEGREE_PER_SLOTS_X100 * numPhaseChanges) % SCALE_FACTOR);
+}
+
+void enableYawRefInt(){
+    GPIOIntEnable(YAW_REF_PORT, YAW_REF_PIN);
+}
+
+void disableYawRefInt(){
+    GPIOIntDisable(YAW_REF_PORT, YAW_REF_PIN);
 }

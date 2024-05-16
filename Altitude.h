@@ -1,9 +1,17 @@
-/*
- * Altitude.h
- *
- *  Created on: 23/04/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// Altitude.h
+//
+// Defines interface with Altitude module.
+// Handles constants and calculation values for the
+// altitude module.
+//
+// Authored by tfo49 & dta82
+//
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #ifndef ALTITUDE_H_
 #define ALTITUDE_H_
@@ -24,6 +32,9 @@
 #include "circBufT.h"
 #include "inc/hw_ints.h"  // Interrupts
 
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 #define BUF_SIZE 25
 #define SAMPLE_RATE_HZ 125
 #define ADC_1V_RANGE 1241

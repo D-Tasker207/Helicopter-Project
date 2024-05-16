@@ -1,9 +1,18 @@
-/*
- * Altitude.c
- *
- *  Created on: 29/04/2024
- *      Author: tfo49 & dta82
- */
+// *******************************************************
+//
+// Altitude.c
+//
+// Module to handle monitoring helicopter altitude.
+// This includes initialising the ADC, registering the ADC read interrupt
+// and performing calculations to find the mean ADC val and the % altitude.
+// The ADC passes input data to the ci
+//
+// Authored by tfo49 & dta82
+// With sample code by P.J. Bones UCECE from ENCE361 labs
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include "Altitude.h"
 

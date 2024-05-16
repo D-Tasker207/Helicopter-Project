@@ -1,9 +1,14 @@
-/*
- * UART.c
- *
- *  Created on: 9/05/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// UART.c
+//
+// Initialises & manages UART communication
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include "UART.h"
 

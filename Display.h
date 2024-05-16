@@ -1,10 +1,14 @@
-/*
- * Display.h
- *
- *  Created on: 23/04/2024
- *      Author: tfo49 & dta82
- */
-
+// *******************************************************
+//
+// circBufT.c
+//
+// Manages interface for Display.c.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 
 #ifndef DISPLAY_H_

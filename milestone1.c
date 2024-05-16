@@ -1,9 +1,17 @@
-/*
- * milestone1.c
- *
- *  Created on: 18/03/2024
- *      Author: tfo49 & dta82
- */
+// *******************************************************
+//
+// milestone1.c
+//
+// Handles helicopter behaviour by monitoring altitude and yaw calculated with peripheral functions.
+// Manages control effort output to motors to drive the helicopter.
+// Contains the flight control FSM
+// Passes control parameters to UART & Display.
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -23,6 +31,8 @@
 #include "Display.h"
 #include "Altitude.h"
 #include "Yaw.h"
+#include "PID.h"
+#include "PWM.h"
 #include "UART.h"
 #include "inc/hw_ints.h"  // Interrupts
 
@@ -33,11 +43,30 @@
 #define SYSTICK_RATE_HZ 100
 #define SLOWTICK_RATE_HZ 25
 
+#define MIN_ALT 0
+#define MAX_ALT 100
+
+#define TAKEOFF_SETPOINT 20
+#define YAW_REF_INCREMENT 1
+
+#define ALT_INCREMENT 10
+#define YAW_INCREMENT 15
+
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+
 //*****************************************************************************
 // Global variables
 //*****************************************************************************
-
 volatile uint8_t slowTick = false; // Flag used to refresh the OLED display
+volatile uint8_t oneMSFlag = false;
+
+enum HelicopterStates{
+    LANDED = 0,
+    TAKEOFF,
+    FLYING,
+    LANDING
+};
 
 //********************************************************
 // Function Definitions
@@ -86,12 +115,24 @@ int main(){
     initButtons();
     initDisplay();
     initYaw();
+    initMotorPWM();
     initUART();
     initSysTick();
     IntMasterEnable(); // Enable interrupts to the processor.
 
+    enum HelicopterStates currentState;
+    currentState = LANDED;
+    bool stateShift = false;
+
     int32_t landedAlt = 0;
+
     int32_t currentAlt = 0;
+    int32_t currentYaw = 0;
+    int32_t currentYawDec = 0;
+
+    int32_t altSetpoint = 0;
+    int32_t yawSetpoint = 0;
+
 
     // Delay for ADC buffer to fill
     SysCtlDelay(SysCtlClockGet() / 4); 
@@ -100,24 +141,153 @@ int main(){
     landedAlt = calculateMeanAltVal();
 
     while(1){
+        if(checkButton(RESET) == PUSHED) SysCtlReset();
+
+        switch(currentState){
+        case(LANDED):
+            if(stateShift){
+                toggleRotors();
+                stateShift = false;
+
+                mainControlEffort = 0;
+                tailControlEffort = 0;
+            }
+
+            if(checkButton(SWITCH1) == PUSHED){
+                toggleRotors();
+                stateShift = true;
+                currentState = TAKEOFF;
+            }
+
+            break;
+        case(TAKEOFF):
+            if(stateShift){
+                stateShift = false;
+                isYawCalibrated = false;
+                enableYawRefInt();
+            }
+
+//            // ease setpoint up to TAKEOFF_ALT
+            if(altSetpoint < TAKEOFF_SETPOINT){
+                altSetpoint++;
+            }
+            else if(!isYawCalibrated){ // wait until altitude is calibrated before calibrating yaw
+                // spin until yaw is calibrated
+                yawSetpoint = currentYaw + YAW_REF_INCREMENT;
+                yawSetpoint = (yawSetpoint >= 180) ? yawSetpoint - 360 : yawSetpoint;
+            }
+            else{
+                yawSetpoint = 0; //when yaw is calibrated adjust the setpoint to be zeroed as well
+//                disableYawRefInt();
+                stateShift = true;
+                currentState = FLYING;
+            }
+
+            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt);
+            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw);
+
+            SetMainPWM(mainControlEffort);
+            SetTailPWM(tailControlEffort);
+
+            break;
+        case(FLYING):
+            if(yawSetpoint == currentYaw) intErrTail = 0; //zero integral error when we hit the setpoint to reduce overshoot
+
+
+            if(checkButton(LEFT) == RELEASED){
+                yawSetpoint -= YAW_INCREMENT;
+                yawSetpoint = (yawSetpoint <= -180) ? yawSetpoint + 360 : yawSetpoint;
+            }
+            if(checkButton(RIGHT) == RELEASED){
+                yawSetpoint += YAW_INCREMENT;
+                yawSetpoint = (yawSetpoint >= 180) ? yawSetpoint - 360 : yawSetpoint;
+            }
+            if(checkButton(UP) == RELEASED)
+                altSetpoint = min(MAX_ALT, altSetpoint + ALT_INCREMENT);
+            if(checkButton(DOWN) == RELEASED)
+                altSetpoint = max(MIN_ALT, altSetpoint - ALT_INCREMENT);
+
+            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt);
+            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw);
+
+            SetMainPWM(mainControlEffort);
+            SetTailPWM(tailControlEffort);
+
+            if(checkButton(SWITCH1) == RELEASED){
+                stateShift = true;
+                currentState = LANDING;
+            }
+
+            break;
+        case(LANDING):
+            if(yawSetpoint == currentYaw) intErrTail = 0; //zero integral error when we hit the setpoint to reduce overshoot
+
+            if(stateShift){
+                stateShift = false;
+                altSetpoint = TAKEOFF_SETPOINT;
+            }
+
+            // if yaw is zeroed and helicopter is at the minimum altitude
+            //  transition to LANDED state
+            if((currentAlt == MIN_ALT) && currentYaw == 0){
+                stateShift = true;
+                currentState = LANDED;
+            }
+
+            // zero yaw before descending
+            if(currentAlt == TAKEOFF_SETPOINT && currentYaw != 0){
+                yawSetpoint = 0;
+            }
+            else if(currentAlt > MIN_ALT && currentYaw == 0){
+                altSetpoint = max(MIN_ALT, altSetpoint - ALT_INCREMENT);
+            }
+
+            mainControlEffort = controllerUpdateMain(altSetpoint, currentAlt);
+            tailControlEffort = controllerUpdateTail(yawSetpoint, currentYaw);
+
+            SetMainPWM(mainControlEffort);
+            SetTailPWM(tailControlEffort);
+            break;
+        }
+
         // Calculate the mean value of the ADC buffer
-        currentAlt = calculateMeanAltVal();
-
-        if(checkButton(RESET) == RELEASED) SysCtlReset();
-
-//        if(checkButton(LEFT) == RELEASED) UARTSend("Left Button Pressed\n\r");
-//        if(checkButton(RIGHT) == RELEASED) UARTSend("Right Button Pressed\n\r");
-//        if(checkButton(UP) == RELEASED) UARTSend("Up Button Pressed\n\r");
-//        if(checkButton(DOWN) == RELEASED) UARTSend("Down Button Pressed\n\r");
-        if(checkButton(SWITCH1) == PUSHED) UARTSend("Switch Button has been pushed\n\r");
-        if(checkButton(SWITCH1) == RELEASED) UARTSend("Switch Button has been released\n\r");
+        currentAlt = getAltPercent(calculateMeanAltVal(), landedAlt);
+        currentYaw = getYawDegrees();
+        currentYawDec = getYawDecimal();
 
         // Refresh the OLED display on slow ticks
         if(slowTick){
-            displayAlt(getAltPercent(currentAlt, landedAlt));
-            displayYaw(getYawDegrees(), getYawDecimal());
+            displayAlt(currentAlt);
+            displayYaw(currentYaw, currentYawDec);
+            displayMainPWM(mainControlEffort);
+            displayTailPWM(tailControlEffort);
 
-            slowTick = false;
+            //write code to send data over UART
+            char string[135];
+            switch(currentState){
+                case(LANDED):
+                    usnprintf(string, sizeof(string),  "\rLANDED, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+                case(TAKEOFF):
+                    usnprintf(string, sizeof(string),  "\rTAKEOFF, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+                case(FLYING):
+                    usnprintf(string, sizeof(string),  "\rFLYING, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+                case(LANDING):
+                    usnprintf(string, sizeof(string),  "\rLANDING, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+            }
+
+            UARTSend(string);
         }
     }
 }

@@ -1,9 +1,14 @@
-/*
- * UART.h
- *
- *  Created on: 9/05/2024
- *      Author: tfo49
- */
+// *******************************************************
+//
+// UART.h
+//
+// Handles UART module interface and defines necessary constants
+//
+// Authored with by tfo49 & dta82
+//
+// Created 23/04/2024
+//
+// *******************************************************
 
 #ifndef UART_H_
 #define UART_H_
@@ -23,6 +28,10 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+
+//*****************************************************************************
+// Constants
+//*****************************************************************************
 // UART configuration constants
 #define BAUD_RATE 9600
 #define UART_BASE UART0_BASE
