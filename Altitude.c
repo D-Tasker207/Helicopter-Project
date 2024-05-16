@@ -1,9 +1,19 @@
-/*
- * Altitude.c
- *
- *  Created on: 29/04/2024
- *      Author: tfo49 & dta82
- */
+// *******************************************************
+//
+// Altitude.c
+//
+// Module to handle monitoring helicopter altitude
+// This includes initialising the
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// *******************************************************
 
 #include "Altitude.h"
 

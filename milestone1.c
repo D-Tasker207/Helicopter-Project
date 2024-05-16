@@ -140,6 +140,9 @@ int main(){
             if(stateShift){
                 toggleRotors();
                 stateShift = false;
+
+                mainControlEffort = 0;
+                tailControlEffort = 0;
             }
 
             if(checkButton(SWITCH1) == PUSHED){
@@ -202,7 +205,7 @@ int main(){
             SetMainPWM(mainControlEffort);
             SetTailPWM(tailControlEffort);
 
-            if(checkButton(SWITCH1) == PUSHED){
+            if(checkButton(SWITCH1) == RELEASED){
                 stateShift = true;
                 currentState = LANDING;
             }
@@ -252,9 +255,30 @@ int main(){
             displayTailPWM(tailControlEffort);
 
             //write code to send data over UART
-            char string[88];
-            usnprintf(string, sizeof(string),  "\r%d, YawSet: %d, YawCur: %d, AltSet: %d, AltCur:%d, MainIErr: %d, TailIErr: %d\n", (int)currentState, yawSetpoint, currentYaw, altSetpoint, currentAlt, intErrMain, intErrTail);
-//            usnprintf(string, sizeof(string),  "\rState: %d, YawSet: %d, AltSet: %d\n, isYawCalibated = %d", (int)currentState, yawSetpoint, altSetpoint, isYawCalibrated);
+            char string[135];
+            switch(currentState){
+                case(LANDED):
+                    usnprintf(string, sizeof(string),  "\rLANDED, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+                case(TAKEOFF):
+                    usnprintf(string, sizeof(string),  "\rTAKEOFF, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+                case(FLYING):
+                    usnprintf(string, sizeof(string),  "\rFLYING, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+                case(LANDING):
+                    usnprintf(string, sizeof(string),  "\rLANDING, Yaw Setpoint: %4d Deg, Current Yaw: %4d.%02d Deg, AltSetpoint: %3d%%, Current Alt:%3d%%, Main Duty%%: %02d%%, Tail Duty%%: %02d%%\n",
+                          yawSetpoint, currentYaw, currentYawDec,
+                          altSetpoint, currentAlt, mainControlEffort, tailControlEffort);
+                    break;
+            }
+
             UARTSend(string);
         }
     }
